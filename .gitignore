@@ -99,3 +99,4 @@ fmod_editor.log
 #Custom
 *.log
 UserSettings/EditorUserSettings.asset
+Backend/config/dev.js
