@@ -7,40 +7,11 @@ const app = express();
 const mongoose = require('mongoose');
 mongoose.connect(keys.mongoURI, {useNewUrlParser: true, useUnifiedTopology: true});
 
-//Setip database models
-require('./model/Account')
-const Account = mongoose.model('accounts');
+//Setup database models
+require('./model/Account');
 
-// Routes
-app.get('/account', async (req, res) => {
-
-    const { reqUsername, reqPassword} = req.query;
-    if (reqUsername == null || reqPassword == null) {
-        res.send("Invalid Credentials");
-        return;
-    }
-
-    var userAccount = await Account.findOne( {username : reqUsername} );
-    if (userAccount == null) {
-        var newAccount = new Account({
-            username: reqUsername,
-            password: reqPassword,
-
-            lastAuthentication: Date.now()
-        });
-        await newAccount.save();
-
-        res.send(newAccount);
-        return;
-    } else {
-        if (reqPassword == userAccount.password) {
-            userAccount.lastAuthentication = Date.now();
-            await userAccount.save();
-            res.send(userAccount)
-            return;
-        }
-    }
-});
+//Setup the Routes
+require('./routes/routesAuthentication')(app);
 
 // Listen
 const port = keys.port;
