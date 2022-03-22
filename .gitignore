@@ -1,0 +1,101 @@
+###
+# Unity folders and files
+###
+
+## Frequent
+[Aa]ssets/AssetStoreTools*
+[Bb]uild/
+[Bb]uilds/
+[Ll]ibrary/
+[Ll]ocal[Cc]ache/
+[Oo]bj/
+[Tt]emp/
+[Uu]nityGenerated/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+Assets/_Project/Preferences/Editor/Credentials/**
+Assets/_Project/Preferences/Editor/Credentials.meta
+Assets/Temp/**
+Assets/Temp.meta
+Data/**
+
+# file on crash reports
+sysinfo.txt
+# Unity3D Generated File On Crash Reports
+*.pidb.meta
+*.pdb.meta
+
+# Exclude rider idea data
+.idea
+
+# Builds
+*.apk
+*.unitypackage
+
+###
+# VS/MD solution and project files
+###
+[Ee]xportedObj/
+*.booproj
+*.csproj
+*.sln
+*.suo
+*.svd
+*.unityproj
+*.user
+*.userprefs
+*.pidb
+.DS_Store
+.consulo/
+*.tmp
+*.pdb
+*.opendb
+*.VC.db
+
+###
+# OS generated
+###
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+#Icon? # Eliminated because of interference with desired folders / files 
+ehthumbs.db
+Thumbs.db
+
+# Visual Studio 2015/2017 cache/options directory
+.vs/
+
+#ProBuilder
+**/com.unity.probuilder/Settings.json
+**/com.unity.probuilder/Settings.json~0ec915244e33b2d6f2b6630bd5af0193930197d3
+
+#ParrelSync
+/*_clone_[0-9]*/
+
+# FMOD 1.10.x (Legacy)
+/Assets/FMODAssets/*
+/Assets/FMODStudioCache.meta
+
+#FMOD
+/FMOD_Project/.*
+FMODStudioCache.asset
+FMODStudioCache.asset.meta
+# Log-files
+fmod.log
+fmod_editor.log
+# Never ignore DLLs in the FMOD subfolder, so make sure that the FMOD-folder is in the correct path.
+!/[Aa]ssets/Plugins/FMOD/**/*.dll
+# Don't ignore images and gizmos used by FMOD in the Unity Editor
+!/[Aa}ssets/Gizmos/FMOD/*
+!/[Aa}ssets/Editor Default Resources/FMOD/*
+# Ignore the Cache-file since it is updated locally either way
+/[Aa]ssets/**/FMODStudioCache.asset
+/[Aa]ssets/**/FMODStudioCache.asset.meta
+/[Aa]ssets/Plugins/FMOD/Cache.meta
+/[Aa]ssets/Plugins/FMOD/Cache/Editor.meta
+
+#Custom
+*.log
+UserSettings/EditorUserSettings.asset
