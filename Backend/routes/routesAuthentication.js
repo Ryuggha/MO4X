@@ -12,9 +12,9 @@ module.exports = app => {
             return;
         }
 
-        var userAccount = await Account.findOne({ username: reqUsername });
+        let userAccount = await Account.findOne({ username: reqUsername });
         if (userAccount == null) {
-            var newAccount = new Account({
+            let newAccount = new Account({
                 username: reqUsername,
                 password: reqPassword,
 

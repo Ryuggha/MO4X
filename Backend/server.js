@@ -1,10 +1,9 @@
 const express = require('express');
-const keys = require('./config/keys.js')
-
 const app = express();
+const keys = require('./config/keys.js')
+const mongoose = require('mongoose');
 
 // Setting Up DB
-const mongoose = require('mongoose');
 mongoose.connect(keys.mongoURI, {useNewUrlParser: true, useUnifiedTopology: true});
 
 //Setup database models
