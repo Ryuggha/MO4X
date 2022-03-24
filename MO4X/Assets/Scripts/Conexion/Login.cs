@@ -2,18 +2,21 @@ using UnityEngine;
 using UnityEngine.Networking;
 using TMPro;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Login : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI loginHelperText;
+    [SerializeField] private Button logInButton;
     [SerializeField] private TMP_InputField usernameField;
     [SerializeField] private TMP_InputField passwordField;
 
     [Header("WebIntegration")]
-    [SerializeField] private string authenticationEndpoint = "http://127.0.0.1:13756/account";
+    [SerializeField] private string authenticationEndpoint = "http://127.0.0.1:13756/login";
 
     public void OnLoginClick()
     {
+        logInButton.interactable = false;
         loginHelperText.text = "Connecting to the server...";
         StartCoroutine(TryLogin());
     }
@@ -23,7 +26,24 @@ public class Login : MonoBehaviour
         string usernameString = usernameField.text;
         string passwordString = passwordField.text;
 
-        UnityWebRequest loginReq = UnityWebRequest.Get(authenticationEndpoint + $"?reqUsername={usernameString}&reqPassword={passwordString}");
+        if (usernameString.Length < 3 || usernameString.Length > 24)
+        {
+            loginHelperText.text = "Invalid Username";
+            logInButton.interactable = true;
+            yield break;
+        }
+        if (passwordString.Length < 3 || passwordString.Length > 32)
+        {
+            loginHelperText.text = "Invalid Password";
+            logInButton.interactable = true;
+            yield break;
+        }
+
+        WWWForm form = new WWWForm();
+        form.AddField("reqUsername", usernameString);
+        form.AddField("reqPassword", passwordString);
+
+        UnityWebRequest loginReq = UnityWebRequest.Post(authenticationEndpoint, form);
         UnityWebRequestAsyncOperation requestHandler = loginReq.SendWebRequest();
 
         float timeLeft = 10f;
@@ -41,20 +61,30 @@ public class Login : MonoBehaviour
 
         if (loginReq.result == UnityWebRequest.Result.Success)
         {
-            string response = loginReq.downloadHandler.text;
-            if (response == "Invalid Credentials")
+            LogInResponse response = JsonUtility.FromJson<LogInResponse>(loginReq.downloadHandler.text);
+            if (response.code == 0)
+            {
+                loginHelperText.text = $"Welcome to MO4X {response.gameAccount.username}.";
+                Debug.Log("");
+            }
+            else if (response.code == 1)
             {
                 loginHelperText.text = "Invalid Credentials";
+                logInButton.interactable = true;
             }
             else
             {
-                loginHelperText.text = $"Welcome to MO4X";
+                loginHelperText.text = "Unknown Error";
+                logInButton.interactable = true;
             }
         }
         else
         {
             loginHelperText.text = "Unable to connect to the server...";
+            logInButton.interactable = true;
         }
+
+        
 
         yield return null;
     }
