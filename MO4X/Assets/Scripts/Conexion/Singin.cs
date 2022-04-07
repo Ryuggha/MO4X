@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class Singin : MonoBehaviour
 {
+    private SignUpInMenu menu;
     [SerializeField] private TextMeshProUGUI singinHelperText;
     [SerializeField] private Button singinButton;
     [SerializeField] private TMP_InputField emailField;
@@ -19,6 +20,11 @@ public class Singin : MonoBehaviour
 
     [Header("WebIntegration")]
     [SerializeField] private string creationEndapoint = "http://127.0.0.1:13756/singin";
+
+    private void Start()
+    {
+        menu = FindObjectOfType<SignUpInMenu>();
+    }
 
     public void OnSinginClick()
     {
@@ -90,6 +96,7 @@ public class Singin : MonoBehaviour
                 case 0:
                     singinHelperText.text = $"Account created with. Welcome {response.gameAccount.username}.";
                     singinButton.interactable = true;
+                    menu.OnSignInClick();
                     break;
                 case 1:
                     singinHelperText.text = "Invalid Credentials";
