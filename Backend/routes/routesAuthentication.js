@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Account = mongoose.model('accounts');
+const Account = mongoose.model('Account');
 
 const argon = require('argon2-ffi').argon2i;
 const crypto = require('crypto');
@@ -35,7 +35,8 @@ module.exports = app => {
                     await userAccount.save();
                     response.code = 0;
                     response.msg = "LogIn Successful";
-                    response.gameAccount =  (({username}) => ({username}))(userAccount);
+                    console.log(userAccount);
+                    response.gameAccount =  (({_id ,username}) => ({_id, username}))(userAccount);
                     res.send(response);
                     return;
                 }
@@ -104,7 +105,7 @@ module.exports = app => {
                 await newAccount.save();
                 response.code = 0;
                 response.msg = "Sing In Successful"
-                response.gameAccount =  (({username}) => ({username}))(newAccount);
+                response.gameAccount = (({username}) => ({username}))(newAccount);
                 res.send(response);
                 return;
             });

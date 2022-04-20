@@ -18,12 +18,12 @@ public class Singin : MonoBehaviour
 
     private const string PASSWORD_REGEX = "(?=.*[A-Za-z])(?=.*[0-9])(?=.{5,32})";
 
-    [Header("WebIntegration")]
-    [SerializeField] private string creationEndapoint = "http://127.0.0.1:13756/singin";
+    private string creationEndapoint = "http://127.0.0.1:13756/singin";
 
     private void Start()
     {
         menu = FindObjectOfType<SignUpInMenu>();
+        creationEndapoint = ConexionController.instance.getConexionEndPoint() + "/singin";
     }
 
     public void OnSinginClick()

@@ -854,7 +854,6 @@ MonoBehaviour:
   usernameField: {fileID: 1740765625}
   passwordField: {fileID: 540310568}
   repeatPasswordField: {fileID: 801440281}
-  creationEndapoint: http://127.0.0.1:13756/singin
 --- !u!224 &579507062 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5081761637858708744, guid: 353c3bad63249244988350d0581cdc71, type: 3}
@@ -1753,7 +1752,6 @@ MonoBehaviour:
   logInButton: {fileID: 297331765}
   usernameField: {fileID: 1349471783}
   passwordField: {fileID: 1530336006}
-  authenticationEndpoint: http://127.0.0.1:13756/login
 --- !u!1 &1490034327
 GameObject:
   m_ObjectHideFlags: 0
@@ -2444,6 +2442,10 @@ PrefabInstance:
     - target: {fileID: 6918475466025680767, guid: 2ad1baf6dc509e24e8f09764085eb53a, type: 3}
       propertyPath: m_Name
       value: ControllerCollection
+      objectReference: {fileID: 0}
+    - target: {fileID: 7209211095467532435, guid: 2ad1baf6dc509e24e8f09764085eb53a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ad1baf6dc509e24e8f09764085eb53a, type: 3}

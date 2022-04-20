@@ -11,8 +11,12 @@ public class Login : MonoBehaviour
     [SerializeField] private TMP_InputField usernameField;
     [SerializeField] private TMP_InputField passwordField;
 
-    [Header("WebIntegration")]
-    [SerializeField] private string authenticationEndpoint = "http://127.0.0.1:13756/login";
+    private string authenticationEndpoint;
+
+    private void Start()
+    {
+        authenticationEndpoint = ConexionController.instance.getConexionEndPoint() + "/login";
+    }
 
     public void OnLoginClick()
     {
@@ -65,7 +69,9 @@ public class Login : MonoBehaviour
             if (response.code == 0)
             {
                 loginHelperText.text = $"Welcome to MO4X {response.gameAccount.username}.";
-                SceneController.instance.changeScene("MainMenu");
+                ConexionController.instance.setUserId(response.gameAccount._id);
+                ConexionController.instance.setUserName(response.gameAccount.username);
+                SceneController.instance.changeScene("MainMenu");                
             }
             else if (response.code == 1)
             {

@@ -16,4 +16,10 @@ public class MainMenuCanvasController : MonoBehaviour
         mainButtons.SetActive(false);
         gameOnCourseCards.SetActive(true);
     }
+
+    public void OnBackToMainMenuClick()
+    {
+        mainButtons.SetActive(true);
+        gameOnCourseCards.SetActive(false);
+    }
 }
