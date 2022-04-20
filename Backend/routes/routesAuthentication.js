@@ -35,7 +35,6 @@ module.exports = app => {
                     await userAccount.save();
                     response.code = 0;
                     response.msg = "LogIn Successful";
-                    console.log(userAccount);
                     response.gameAccount =  (({_id ,username}) => ({_id, username}))(userAccount);
                     res.send(response);
                     return;
