@@ -9,8 +9,9 @@ const gameSchema = new Schema({
         set: v => Math.round(v),
         alias: 'i'
     },
-    stars: Array,
     users: Array,
+    inviteCode: String,
+    stars: Array,
     turnCacheList: {
         type: Array,
         default: []

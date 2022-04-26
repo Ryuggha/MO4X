@@ -17,17 +17,26 @@ module.exports = app => {
             return;
         }
 
+        var inviteCode;
+        var searchBool = false;
+        while (!searchBool) {
+            inviteCode = Math.random().toString(36).substring(2, 10);
+            var a = await Game.findOne({actualTurn: -1, inviteCode: inviteCode});
+            if (a === null) searchBool = true;
+        }
+
         var newGame = new Game({
             name: name,
-            stars: ["a", "b"],
             numberOfPlayers: numberOfPlayers,
             users: users,
+            inviteCode: inviteCode,
+            stars: ["a", "b"],
             actualTurn: -1
         })
         await newGame.save();
         response.code = 0;
         response.msg = "Game Created";
-        response.inviteCode = ""; //Math.random().toString(16)
+        response.inviteCode = inviteCode;
         res.send(response);
         return;
     });

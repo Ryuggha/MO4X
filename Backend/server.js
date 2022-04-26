@@ -23,5 +23,5 @@ require('./routes/routesGameManagement')(app);
 // Listen
 const port = keys.port;
 app.listen(port, () => {
-    console.log("Listening on " + port);
+    console.log("Listening on port: " + port);
 })

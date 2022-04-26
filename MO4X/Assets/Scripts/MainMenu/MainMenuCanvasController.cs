@@ -15,6 +15,17 @@ public class MainMenuCanvasController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI createGameHelperText;
     [SerializeField] private TMP_InputField numberOfPlayersField;
     [SerializeField] private TMP_InputField gameNameFeild;
+    [SerializeField] private GameObject copyCodeButton;
+    [SerializeField] private TextMeshProUGUI inviteCodeText;
+    private string inviteCode;
+
+    private TextEditor textEditor;
+
+    
+    private void Start()
+    {
+        textEditor = new TextEditor();
+    }
 
     public void OnCreateGameMenuClick()
     {
@@ -33,6 +44,15 @@ public class MainMenuCanvasController : MonoBehaviour
         mainButtons.SetActive(true);
         gameOnCourseCards.SetActive(false);
         createGame.SetActive(false);
+
+        //CreateGame Default Settings
+        createGameButton.interactable = true;
+        createGameHelperText.text = "Create Game";
+        numberOfPlayersField.text = "";
+        gameNameFeild.text = "";
+        copyCodeButton.SetActive(false);
+        inviteCodeText.text = "";
+        inviteCode = "";
     }
 
     public void OnCreateGameClick()
@@ -73,7 +93,10 @@ public class MainMenuCanvasController : MonoBehaviour
             CreateGameResponse response = JsonUtility.FromJson<CreateGameResponse>(request.downloadHandler.text);
             if (response.code == 0)
             {
-                createGameHelperText.text = "Nice\n Invite code: " + response.inviteCode;
+                this.inviteCode = response.inviteCode;
+                createGameHelperText.text = "Nice";
+                inviteCodeText.text = "Invite code: " + inviteCode;
+                copyCodeButton.SetActive(true);
             }
             else
             {
@@ -89,5 +112,12 @@ public class MainMenuCanvasController : MonoBehaviour
         }
 
         yield return null;
+    }
+
+    public void OnCopyToClipboardClick()
+    {
+        textEditor.text = inviteCode;
+        textEditor.SelectAll();
+        textEditor.Copy();
     }
 }
