@@ -9,7 +9,7 @@ public class ConexionController : MonoBehaviour
     [SerializeField] private string conexionEndPoint = "http://127.0.0.1:13756";
 
     [SerializeField] private string userName;
-    private string userId;
+    [SerializeField] private string userId;
 
     private void Awake()
     {
@@ -19,6 +19,7 @@ public class ConexionController : MonoBehaviour
         }
         else
         {
+            userId = "623cd766d9c3565285fefa21"; //TestId
             ConexionController.instance = this;
             DontDestroyOnLoad(this);
         }
@@ -37,5 +38,10 @@ public class ConexionController : MonoBehaviour
     public void setUserId (string userId)
     {
         this.userId = userId;
+    }
+
+    public string getUserId()
+    {
+        return this.userId;
     }
 }

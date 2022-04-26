@@ -14,9 +14,11 @@ mongoose.connect(keys.mongoURI, {useNewUrlParser: true, useUnifiedTopology: true
 
 //Setup database models
 require('./model/Account');
+require('./model/Game');
 
 //Setup the Routes
 require('./routes/routesAuthentication')(app);
+require('./routes/routesGameManagement')(app);
 
 // Listen
 const port = keys.port;
