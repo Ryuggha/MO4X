@@ -98,6 +98,18 @@ public class MainMenuCanvasController : MonoBehaviour
                 inviteCodeText.text = "Invite code: " + inviteCode;
                 copyCodeButton.SetActive(true);
             }
+            else if (response.code == 1)
+            {
+                createGameHelperText.text = "Unknown Error";
+                createGameButton.interactable = true;
+                Debug.Log(response.msg);
+            }
+            else if (response.code == 2)
+            {
+                createGameHelperText.text = response.msg;
+                createGameButton.interactable = true;
+                Debug.Log(response.msg);
+            }
             else
             {
                 createGameHelperText.text = "Unknown Error";

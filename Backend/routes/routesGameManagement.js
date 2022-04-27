@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const Game = mongoose.model('Game');
 const { response } = require('express');
 
+const maxPlayers = 16;
+
 module.exports = app => {
 
     //Routes
@@ -13,6 +15,13 @@ module.exports = app => {
         if (users === null || users.length < 1) {
             response.code = 1;
             response.msg = "No players found";
+            res.send(response);
+            return;
+        }
+
+        if (numberOfPlayers > maxPlayers) {
+            response.code = 2;
+            response.msg = "Games have a maximum of "+maxPlayers + " players: " + numberOfPlayers + " found"; 
             res.send(response);
             return;
         }
