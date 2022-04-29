@@ -9,6 +9,7 @@ public class MainMenuCanvasController : MonoBehaviour
     [SerializeField] private GameObject mainButtons;
     [SerializeField] private GameObject gameOnCourseCards;
     [SerializeField] private GameObject createGame;
+    [SerializeField] private GameObject joinGameMenu;
 
     [Header("Create Game Objects")]
     [SerializeField] private Button createGameButton;
@@ -18,6 +19,12 @@ public class MainMenuCanvasController : MonoBehaviour
     [SerializeField] private GameObject copyCodeButton;
     [SerializeField] private TextMeshProUGUI inviteCodeText;
     private string inviteCode;
+
+    [Header("Join Game Objects")]
+    [SerializeField] private Button joinGameButton;
+    [SerializeField] private TextMeshProUGUI joinGameHelperText;
+    [SerializeField] private TMP_InputField inviteCodeField;
+
 
     private TextEditor textEditor;
 
@@ -39,11 +46,24 @@ public class MainMenuCanvasController : MonoBehaviour
         gameOnCourseCards.SetActive(true);
     }
 
+    public void OnJoinMenuClick()
+    {
+        mainButtons.SetActive(false);
+        joinGameMenu.SetActive(true);
+
+    }
+
     public void OnBackToMainMenuClick()
     {
         mainButtons.SetActive(true);
         gameOnCourseCards.SetActive(false);
         createGame.SetActive(false);
+        joinGameMenu.SetActive(false);
+
+        //JoinGame Default Settings
+        joinGameButton.interactable = true;
+        joinGameHelperText.text = "Write an invite code to join a game";
+        inviteCodeField.text = "";
 
         //CreateGame Default Settings
         createGameButton.interactable = true;
@@ -75,7 +95,7 @@ public class MainMenuCanvasController : MonoBehaviour
         UnityWebRequest request = UnityWebRequest.Post(ConexionController.instance.getConexionEndPoint() + "/createGame", form);
         UnityWebRequestAsyncOperation requestHandler = request.SendWebRequest();
                
-        float timeLeft = 10f;
+        float timeLeft = 60f;
         while (!requestHandler.isDone)
         {
             timeLeft -= Time.deltaTime;
@@ -94,7 +114,7 @@ public class MainMenuCanvasController : MonoBehaviour
             if (response.code == 0)
             {
                 this.inviteCode = response.inviteCode;
-                createGameHelperText.text = "Nice";
+                createGameHelperText.text = "Game Succesfully Created";
                 inviteCodeText.text = "Invite code: " + inviteCode;
                 copyCodeButton.SetActive(true);
             }
@@ -131,5 +151,97 @@ public class MainMenuCanvasController : MonoBehaviour
         textEditor.text = inviteCode;
         textEditor.SelectAll();
         textEditor.Copy();
+    }
+
+    public void OnPasteFromClipboardClick()
+    {
+        textEditor.text = "";
+        textEditor.Paste();
+        inviteCodeField.text = textEditor.text;
+    }
+
+    public void OnJoinClick()
+    {
+        joinGameButton.interactable = false;
+        joinGameHelperText.text = "Joining Game...";
+        StartCoroutine(TryJoinGame());
+    }
+
+    public IEnumerator TryJoinGame()
+    {
+        string code = inviteCodeField.text.Trim();
+
+        WWWForm form = new WWWForm();
+        form.AddField("inviteCode", code);
+        form.AddField("userID", ConexionController.instance.getUserId());
+
+        UnityWebRequest request = UnityWebRequest.Post(ConexionController.instance.getConexionEndPoint() + "/joinGame", form);
+        UnityWebRequestAsyncOperation requestHandler = request.SendWebRequest();
+
+        float timeLeft = 10f;
+        while (!requestHandler.isDone)
+        {
+            timeLeft -= Time.deltaTime;
+
+            if (timeLeft < 0)
+            {
+                break;
+            }
+
+            yield return null;
+        }
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            JoinGameResponse response = JsonUtility.FromJson<JoinGameResponse>(request.downloadHandler.text);
+            if (response.code == 0)
+            {
+                joinGameHelperText.text = "You have joined the game: " + response.gameName;
+            }
+            else if (response.code == 1)
+            {
+                joinGameHelperText.text = "Unexpected Client Error";
+                joinGameButton.interactable = true;
+                Debug.Log(response.msg);
+            }
+            else if (response.code == 2)
+            {
+                joinGameHelperText.text = "Not games found for the given code";
+                joinGameButton.interactable = true;
+                Debug.Log(response.msg);
+            }
+            else if (response.code == 3)
+            {
+                joinGameHelperText.text = "That game is already full";
+                joinGameButton.interactable = true;
+                Debug.Log(response.msg);
+            }
+            else if (response.code == 4) 
+            {
+                joinGameHelperText.text = "Unexpected Error: User not found";
+                joinGameButton.interactable = true;
+                Debug.Log(response.msg);
+            }
+            else if (response.code == 5)
+            {
+                joinGameHelperText.text = "You already are in that game";
+                joinGameButton.interactable = true;
+                Debug.Log(response.msg);
+            }
+            else
+            {
+                joinGameHelperText.text = "Unknown Error";
+                joinGameButton.interactable = true;
+                Debug.Log(response.msg);
+            }
+        }
+        else
+        {
+            joinGameHelperText.text = "Unable to connect to the server...";
+            joinGameButton.interactable = true;
+        }
+
+
+        yield return null;
     }
 }

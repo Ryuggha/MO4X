@@ -9,7 +9,9 @@ const gameSchema = new Schema({
         set: v => Math.round(v),
         alias: 'i'
     },
-    users: Array,
+    users: [{
+        type: mongoose.Types.ObjectId, ref: 'Account'
+    }],
     inviteCode: String,
     stars: Array,
     turnCacheList: {

@@ -35,10 +35,10 @@ public class Singin : MonoBehaviour
 
     private IEnumerator TrySingin()
     {
-        string emailString = emailField.text;
-        string usernameString = usernameField.text;
-        string passwordString = passwordField.text;
-        string repeatPasswordString = repeatPasswordField.text;
+        string emailString = emailField.text.Trim();
+        string usernameString = usernameField.text.Trim();
+        string passwordString = passwordField.text.Trim();
+        string repeatPasswordString = repeatPasswordField.text.Trim();
 
         if (usernameString.Length < 3 || usernameString.Length > 24)
         {

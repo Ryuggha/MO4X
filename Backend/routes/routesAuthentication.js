@@ -15,15 +15,15 @@ module.exports = app => {
         let response = {}
 
         const { reqUsername, reqPassword } = req.body;
-        if (reqUsername === null || reqPassword === null) {
+        if (reqUsername == null || reqPassword == null) {
             response.code = 1;
             response.msg = "Invalid Credentials"
             res.send(response);
             return;
         }
 
-        let userAccount = await Account.findOne({ username: reqUsername }, 'username password');
-        if (userAccount === null) {
+        let userAccount = await Account.findOne({ username: reqUsername }, 'username password _id');
+        if (userAccount == null) {
             response.code = 1;
             response.msg = "Invalid Credentials"
             res.send(response);
@@ -35,7 +35,7 @@ module.exports = app => {
                     await userAccount.save();
                     response.code = 0;
                     response.msg = "LogIn Successful";
-                    response.gameAccount =  (({_id ,username}) => ({_id, username}))(userAccount);
+                    response.gameAccount = (({_id ,username}) => ({_id, username}))(userAccount);
                     res.send(response);
                     return;
                 }
@@ -54,14 +54,14 @@ module.exports = app => {
         let response = {}
 
         const {username, password, email} = req.body;
-        if (email === null) {
+        if (email == null) {
             response.code = 1;
             response.msg = "Invalid Credentials"
             res.send(response);
             return;
         }
 
-        if (username === null || username.length < 3 || username.length > 24) {
+        if (username == null || username.length < 3 || username.length > 24) {
             response.code = 1;
             response.msg = "Invalid Credentials"
             res.send(response);
@@ -76,7 +76,7 @@ module.exports = app => {
         }
 
         let findEmailAccountOnDB = await Account.findOne({ email: email }, 'email')
-        if (findEmailAccountOnDB !== null) {
+        if (findEmailAccountOnDB != null) {
             response.code = 2;
             response.msg = "This email already exists"
             res.send(response);
@@ -84,7 +84,7 @@ module.exports = app => {
         }
 
         let findUsernameAccountOnDB = await Account.findOne({ username: username }, 'username')
-        if (findUsernameAccountOnDB !== null) {
+        if (findUsernameAccountOnDB != null) {
             response.code = 3;
             response.msg = "This username already exists"
             res.send(response);

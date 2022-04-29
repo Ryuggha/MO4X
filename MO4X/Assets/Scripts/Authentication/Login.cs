@@ -27,8 +27,8 @@ public class Login : MonoBehaviour
 
     private IEnumerator TryLogin()
     {
-        string usernameString = usernameField.text;
-        string passwordString = passwordField.text;
+        string usernameString = usernameField.text.Trim();
+        string passwordString = passwordField.text.Trim();
 
         if (usernameString.Length < 3 || usernameString.Length > 24)
         {

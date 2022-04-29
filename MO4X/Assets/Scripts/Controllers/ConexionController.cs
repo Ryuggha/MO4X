@@ -19,7 +19,7 @@ public class ConexionController : MonoBehaviour
         }
         else
         {
-            userId = "623cd766d9c3565285fefa21"; //TestId
+            userId = "623cd7ef881417e8cf74610b"; //TestId
             ConexionController.instance = this;
             DontDestroyOnLoad(this);
         }
@@ -35,8 +35,8 @@ public class ConexionController : MonoBehaviour
         this.userName = userName;
     }
 
-    public void setUserId (string userId)
-    {
+    public void setUserId(string userId)
+    { 
         this.userId = userId;
     }
 
