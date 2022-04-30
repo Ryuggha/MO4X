@@ -25,7 +25,6 @@ public class MainMenuCanvasController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI joinGameHelperText;
     [SerializeField] private TMP_InputField inviteCodeField;
 
-
     private TextEditor textEditor;
 
     
@@ -42,8 +41,8 @@ public class MainMenuCanvasController : MonoBehaviour
 
     public void OnShowCurrentGamesClick()
     {
-        mainButtons.SetActive(false);
         gameOnCourseCards.SetActive(true);
+        mainButtons.SetActive(false);
     }
 
     public void OnJoinMenuClick()

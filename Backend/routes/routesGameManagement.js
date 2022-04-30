@@ -101,13 +101,59 @@ module.exports = app => {
         response.gameName = game.name;
         res.send(response);
 
+        if (game.numberOfPlayers <= game.users.length) {
+            console.log("Implementation of emplenishment of games not done");
+        }
+
         return;
     });
 
-    app.post('getGames', async (req, res) => {
+    app.post('/getGames', async (req, res) => {
         
         let response = {};
 
+        const { userId } = req.body;
+
+        let games = await Game.find({users: mongoose.Types.ObjectId(userId)}, "name users inviteCode actualTurn _id");
+        console.log(games);
+
         
+
+        response.games = [];
+        console.log("----------------------------");
+        let auxUsers = [];
+        for (const x of games) {
+            let userCache = {};
+            for (const user of x.users) {
+                let auxUsername = userCache[user];
+                if (auxUsername == null) {
+                    auxUsername = await Account.findById(user, "username");
+                    userCache[user] = auxUsername.username;
+                    console.log("Username  " + userCache[user]);
+                }
+                auxUsers.push(auxUsername.username);
+            }
+            response.games.push({
+                name: x.name,
+                _id: x._id,
+                users: auxUsers,
+                inviteCode: x.inviteCode,
+                actualTurn: x.actualTurn
+            });
+        }
+
+        console.log("----------------------------");
+        console.log(response.games);
+        return;
     });
+
+    async function getUsersLauncher(users) {
+        let aux = await getUsersById(users);
+        return aux;
+    }
+
+    async function getUsersById(users) {
+        
+        return auxUsers;
+    }
 }
