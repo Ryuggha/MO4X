@@ -113,14 +113,21 @@ module.exports = app => {
         let response = {};
 
         const { userId } = req.body;
+        if (games == null) {
+            response.code = 2;
+            response.msg = "Bad Client Error";
+            res.send(response);
+            return;
+        }
 
         let games = await Game.find({users: mongoose.Types.ObjectId(userId)}, "name users inviteCode actualTurn _id");
-        console.log(games);
-
-        
-
+        if (games == null) {
+            response.code = 1;
+            response.msg = "games not found";
+            res.send(response);
+            return;
+        }
         response.games = [];
-        console.log("----------------------------");
         let auxUsers = [];
         for (const x of games) {
             let userCache = {};
@@ -129,7 +136,6 @@ module.exports = app => {
                 if (auxUsername == null) {
                     auxUsername = await Account.findById(user, "username");
                     userCache[user] = auxUsername.username;
-                    console.log("Username  " + userCache[user]);
                 }
                 auxUsers.push(auxUsername.username);
             }
@@ -141,9 +147,9 @@ module.exports = app => {
                 actualTurn: x.actualTurn
             });
         }
-
-        console.log("----------------------------");
-        console.log(response.games);
+        response.code = 0;
+        response.msg = "Games sent";
+        res.send(response);
         return;
     });
 
