@@ -93,9 +93,6 @@ module.exports = app => {
             return;
         }
 
-        game.users.push(user._id);
-        await game.save();
-
         response.code = 0;
         response.msg = "Join Successful";
         response.gameName = game.name;
@@ -105,6 +102,9 @@ module.exports = app => {
             console.log("Implementation of emplenishment of games not done");
         }
 
+        game.users.push(user._id);
+        await game.save();
+
         return;
     });
 
@@ -113,14 +113,14 @@ module.exports = app => {
         let response = {};
 
         const { userId } = req.body;
-        if (games == null) {
+        if (userId == null) {
             response.code = 2;
             response.msg = "Bad Client Error";
             res.send(response);
             return;
         }
 
-        let games = await Game.find({users: mongoose.Types.ObjectId(userId)}, "name users inviteCode actualTurn _id");
+        let games = await Game.find({users: mongoose.Types.ObjectId(userId)}, "name users inviteCode actualTurn _id numberOfPlayers");
         if (games == null) {
             response.code = 1;
             response.msg = "games not found";
@@ -143,6 +143,7 @@ module.exports = app => {
                 name: x.name,
                 _id: x._id,
                 users: auxUsers,
+                numberOfPlayers: x.numberOfPlayers,
                 inviteCode: x.inviteCode,
                 actualTurn: x.actualTurn
             });

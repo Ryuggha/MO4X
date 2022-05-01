@@ -59,6 +59,11 @@ public class MainMenuCanvasController : MonoBehaviour
         createGame.SetActive(false);
         joinGameMenu.SetActive(false);
 
+        foreach (GameNotReadyMenu menu in FindObjectsOfType<GameNotReadyMenu>())
+        {
+            menu.OnBackClick();
+        }
+
         //JoinGame Default Settings
         joinGameButton.interactable = true;
         joinGameHelperText.text = "Write an invite code to join a game";
@@ -172,7 +177,7 @@ public class MainMenuCanvasController : MonoBehaviour
 
         WWWForm form = new WWWForm();
         form.AddField("inviteCode", code);
-        form.AddField("userID", ConexionController.instance.getUserId());
+        form.AddField("userId", ConexionController.instance.getUserId());
 
         UnityWebRequest request = UnityWebRequest.Post(ConexionController.instance.getConexionEndPoint() + "/joinGame", form);
         UnityWebRequestAsyncOperation requestHandler = request.SendWebRequest();

@@ -43,9 +43,19 @@ public class CardsReciever : MonoBehaviour
             GameListResponse response = JsonUtility.FromJson<GameListResponse>(request.downloadHandler.text);
             if (response.code == 0)
             {
-                
+                foreach (GameResponse game in response.games)
+                {
+                    GameCardController controller = Instantiate(cardPrefab, transform).GetComponent<GameCardController>();
+
+                    controller.setCard(game, canvasController);
+                }
             }
             else if (response.code == 1)
+            {
+                Debug.Log(response.msg);
+                canvasController.OnBackToMainMenuClick();
+            }
+            else if (response.code == 2)
             {
                 Debug.Log(response.msg);
                 canvasController.OnBackToMainMenuClick();

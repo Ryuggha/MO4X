@@ -91,9 +91,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9519b88b909d8ea42a098406eab76b68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameNotReadyMenu: {fileID: 6566157540887945423, guid: 9ca899a3a065eca4c836b0040c62f332, type: 3}
   nameField: {fileID: 1967192006476695127}
   abailabilityPanel: {fileID: 6473379595975337388}
-  gameButton: {fileID: 7870316262197211099}
   abailableColor: {r: 0.6179246, g: 0.9761093, b: 1, a: 1}
   notAbailableColor: {r: 0.74509805, g: 0.39607844, b: 0.39607844, a: 1}
 --- !u!1 &8981158592417087399
@@ -443,6 +443,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5081761637858708745, guid: 353c3bad63249244988350d0581cdc71, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2928955168714081654}
+    - target: {fileID: 5081761637858708745, guid: 353c3bad63249244988350d0581cdc71, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: onPlayGameClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 5081761637858708745, guid: 353c3bad63249244988350d0581cdc71, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameCardController, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 5081761637858708747, guid: 353c3bad63249244988350d0581cdc71, type: 3}
       propertyPath: m_Name
       value: Button
@@ -466,14 +478,3 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5081761637858708744, guid: 353c3bad63249244988350d0581cdc71, type: 3}
   m_PrefabInstance: {fileID: 3152222562318557906}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7870316262197211099 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5081761637858708745, guid: 353c3bad63249244988350d0581cdc71, type: 3}
-  m_PrefabInstance: {fileID: 3152222562318557906}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
