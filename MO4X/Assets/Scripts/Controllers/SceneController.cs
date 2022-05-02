@@ -25,6 +25,10 @@ public class SceneController : MonoBehaviour
     private void Start()
     {
         screens = new List<LoadingScreenAnimation>();
+    }
+
+    private void searchLoadingScreens()
+    {
         foreach (var screen in FindObjectsOfType<LoadingScreenAnimation>())
         {
             screens.Add(screen);
@@ -38,10 +42,20 @@ public class SceneController : MonoBehaviour
 
     private IEnumerator sceneChangeAfterLoadingScreen(string sceneName)
     {
-        foreach (LoadingScreenAnimation screen in screens)
+        searchLoadingScreens();
+
+        for (int i = screens.Count - 1; i >= 0; i--)
         {
-            screen.fadeIn();
+            if (screens[i] == null)
+            {
+                screens.RemoveAt(i);
+            }
+            else
+            {
+                screens[i].fadeIn();
+            }
         }
+
         yield return new WaitForSeconds(.7f);
         SceneManager.LoadScene(sceneName);
     }

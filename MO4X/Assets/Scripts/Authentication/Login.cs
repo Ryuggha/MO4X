@@ -44,8 +44,8 @@ public class Login : MonoBehaviour
         }
 
         WWWForm form = new WWWForm();
-        form.AddField("reqUsername", usernameString);
-        form.AddField("reqPassword", passwordString);
+        form.AddField("username", usernameString);
+        form.AddField("password", passwordString);
 
         UnityWebRequest loginReq = UnityWebRequest.Post(authenticationEndpoint, form);
         UnityWebRequestAsyncOperation requestHandler = loginReq.SendWebRequest();
