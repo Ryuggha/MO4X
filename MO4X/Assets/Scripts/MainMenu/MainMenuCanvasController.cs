@@ -260,4 +260,63 @@ public class MainMenuCanvasController : MonoBehaviour
         ConexionController.instance.setUser(null);
         SceneController.instance.changeScene("LogInScreen");
     }
+
+    public IEnumerator TryLeaveGame(string gameId, Button button)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("gameId", gameId);
+        form.AddField("userId", ConexionController.instance.getUserId());
+
+        UnityWebRequest request = UnityWebRequest.Post(ConexionController.instance.getConexionEndPoint() + "/leaveGame", form);
+        UnityWebRequestAsyncOperation requestHandler = request.SendWebRequest();
+
+        float timeLeft = 10f;
+        while (!requestHandler.isDone)
+        {
+            timeLeft -= Time.deltaTime;
+
+            if (timeLeft < 0)
+            {
+                break;
+            }
+
+            yield return null;
+        }
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            LeaveGameResponse response = JsonUtility.FromJson<LeaveGameResponse>(request.downloadHandler.text);
+            if (response.code == 0)
+            {
+                OnBackToMainMenuClick();
+            }
+            else if (response.code == 1)
+            {
+                Debug.Log(response.msg);
+                button.interactable = true;
+            }
+            else if (response.code == 2)
+            {
+                Debug.Log(response.msg);
+                button.interactable = true;
+            }
+            else if (response.code == 3)
+            {
+                Debug.Log(response.msg);
+                button.interactable = true;
+            }
+            else
+            {
+                Debug.Log(response.msg);
+                button.interactable = true;
+            }
+        }
+        else
+        {
+            Debug.Log("Unable to connect to the server...");
+            button.interactable = true;
+        }
+
+        yield return null;
+    }
 }

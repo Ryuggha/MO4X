@@ -186,4 +186,50 @@ export = (app: Application) => {
         res.send(response);
         return;
     });
+
+    app.post('/leaveGame', async (req: any, res) => {
+        
+        let response: response = {
+            code: -1,
+            msg: ""
+        }
+
+        const { userId, gameId } = req.body;
+        if (userId == null || gameId == null) {
+            response.code = 1;
+            response.msg = "Bad Client Error";
+            res.send(response);
+            return;
+        }
+
+        let user = await AccountModel.findById(new mongoose.Types.ObjectId(userId)) as account;
+        if (user == null) {
+            response.code = 2;
+            response.msg = "User Id Unknown";
+            res.send(response);
+            return;
+        }
+
+        let game = await GameModel.findById(new mongoose.Types.ObjectId(gameId)) as game;
+        if (game == null) {
+            response.code = 3;
+            response.msg = "Game Id Unknown";
+            res.send(response);
+            return;
+        }
+
+        let i = game.users.indexOf(user._id);
+        if (i >= 0) {
+            game.users.splice(i, 1);
+        }
+        await game.save();
+
+        response.code = 0;
+        response.msg = "User deleted from game"
+        res.send(response);
+
+        if (game.users.length <= 0) {
+            await game.delete();
+        }
+    });
 }

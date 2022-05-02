@@ -1467,6 +1467,8 @@ MonoBehaviour:
   thisMenu: {fileID: 1490034327}
   signUpMenu: {fileID: 553621852}
   signInMenu: {fileID: 1406225488}
+  singIn: {fileID: 1406225494}
+  singUp: {fileID: 553621858}
 --- !u!1 &1251575389
 GameObject:
   m_ObjectHideFlags: 0

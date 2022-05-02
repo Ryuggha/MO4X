@@ -8,14 +8,19 @@ public class GameNotReadyMenu : MonoBehaviour
 {
     private TextEditor textEditor;
     private string inviteCode;
+    private string id;
 
+    [SerializeField] private Button leaveButton;
     [SerializeField] private GameObject layoutPosition;
     [SerializeField] private GameObject userNamePrefab;
     [SerializeField] private TextMeshProUGUI numberOfPlayersText;
     [SerializeField] private TextMeshProUGUI inviteCodeText;
+    private MainMenuCanvasController canvasController;
 
-    public void initialize(int maxPlayers, string inviteCode, string[] users)
+    public void initialize(string id, int maxPlayers, string inviteCode, string[] users, MainMenuCanvasController canvasController)
     {
+        this.id = id;
+        this.canvasController = canvasController;
         textEditor = new TextEditor();
         numberOfPlayersText.text = users.Length + "/" + maxPlayers + " Players";
         this.inviteCode = inviteCode;
@@ -39,5 +44,11 @@ public class GameNotReadyMenu : MonoBehaviour
     public void OnBackClick()
     {
         Destroy(gameObject);
+    }
+
+    public void OnLeaveGameClick()
+    {
+        leaveButton.interactable = false;
+        StartCoroutine(canvasController.TryLeaveGame(id, leaveButton));
     }
 }

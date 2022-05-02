@@ -18,6 +18,14 @@ public class Login : MonoBehaviour
         authenticationEndpoint = ConexionController.instance.getConexionEndPoint() + "/login";
     }
 
+    public void clear()
+    {
+        loginHelperText.text = "Enter your username and password";
+        logInButton.interactable = true;
+        usernameField.text = "";
+        passwordField.text = "";
+    }
+
     public void OnLoginClick()
     {
         logInButton.interactable = false;

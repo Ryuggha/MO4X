@@ -42,7 +42,7 @@ public class GameCardController : MonoBehaviour
         if (game.actualTurn < 0)
         {
             GameNotReadyMenu gnrm = Instantiate(gameNotReadyMenu, canvasController.transform).GetComponent<GameNotReadyMenu>();
-            gnrm.initialize(game.numberOfPlayers, game.inviteCode, game.users);
+            gnrm.initialize(game._id, game.numberOfPlayers, game.inviteCode, game.users, canvasController);
         }
     }
 

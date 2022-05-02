@@ -26,6 +26,16 @@ public class Singin : MonoBehaviour
         creationEndapoint = ConexionController.instance.getConexionEndPoint() + "/singin";
     }
 
+    public void clear()
+    {
+        singinHelperText.text = "Create your account";
+        emailField.text = "";
+        usernameField.text = "";
+        passwordField.text = "";
+        repeatPasswordField.text = "";
+        singinButton.interactable = true;
+    }
+
     public void OnSinginClick()
     {
         singinButton.interactable = false;
