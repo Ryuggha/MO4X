@@ -6,7 +6,6 @@ const bodyParser = require('body-parser');
 const argon = require('argon2-ffi').argon2i;
 const crypto = require('crypto');
 
-
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false}));
 
