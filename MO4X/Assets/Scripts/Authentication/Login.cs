@@ -69,8 +69,7 @@ public class Login : MonoBehaviour
             if (response.code == 0)
             {
                 loginHelperText.text = $"Welcome to MO4X {response.gameAccount.username}.";
-                ConexionController.instance.setUserId(response.gameAccount._id);
-                ConexionController.instance.setUserName(response.gameAccount.username);
+                ConexionController.instance.setUser(response.gameAccount);
                 SceneController.instance.changeScene("MainMenu");                
             }
             else if (response.code == 1)

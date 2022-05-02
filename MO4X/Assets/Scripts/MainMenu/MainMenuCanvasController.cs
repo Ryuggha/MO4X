@@ -248,4 +248,10 @@ public class MainMenuCanvasController : MonoBehaviour
 
         yield return null;
     }
+
+    public void OnLogOutClick()
+    {
+        ConexionController.instance.setUser(null);
+        SceneController.instance.changeScene("LogInScreen");
+    }
 }

@@ -11,6 +11,8 @@ public class ConexionController : MonoBehaviour
     [SerializeField] private string userName;
     [SerializeField] private string userId;
 
+    private GameAccount user;
+
     private void Awake()
     {
         if (SceneController.instance != null)
@@ -30,14 +32,20 @@ public class ConexionController : MonoBehaviour
         return conexionEndPoint;
     }
 
-    public void setUserName(string userName)
+    public void setUser(GameAccount user)
     {
-        this.userName = userName;
-    }
+        this.user = user;
 
-    public void setUserId(string userId)
-    { 
-        this.userId = userId;
+        if (user == null)
+        {
+            userName = "";
+            userId = "";
+        }
+        else
+        {
+            userName = user.username;
+            userId = user._id;
+        }
     }
 
     public string getUserId()
