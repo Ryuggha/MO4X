@@ -21,8 +21,17 @@ export = (app: Application) => {
             msg: ""
         }
 
-        const { name, users, numberOfPlayers } = req.body;
-        if (users == null || users.length < 1) {
+        
+
+        const { name, userId, numberOfPlayers } = req.body;
+        if (userId == null) {
+            response.code = 1;
+            response.msg = "No players found";
+            res.send(response);
+            return;
+        }
+        var user = await AccountModel.findById(new mongoose.Types.ObjectId(userId), '_id') as account;
+        if (user == null) {
             response.code = 1;
             response.msg = "No players found";
             res.send(response);
@@ -32,6 +41,13 @@ export = (app: Application) => {
         if (numberOfPlayers > maxPlayers) {
             response.code = 2;
             response.msg = "Games have a maximum of "+maxPlayers + " players: " + numberOfPlayers + " found"; 
+            res.send(response);
+            return;
+        }
+
+        if (numberOfPlayers < 2) {
+            response.code = 3;
+            response.msg = "Games have a minimum of 2 players"; 
             res.send(response);
             return;
         }
@@ -47,7 +63,7 @@ export = (app: Application) => {
         var newGame = new GameModel({
             name: name,
             numberOfPlayers: numberOfPlayers,
-            users: users,
+            users: user._id,
             inviteCode: inviteCode,
             stars: ["a", "b"],
             actualTurn: -1
@@ -143,20 +159,18 @@ export = (app: Application) => {
             return;
         }
         response.games = [];
-        let auxUsers = [];
-
+        let userCache: any = {};
         for (const currentGame of games) {
+            let auxUsers = [];
             
-            let userCache: any = {};
-
             for (const user of currentGame.users) {
-                let auxUserString = user.toString();
+                
                 let auxUsername = userCache[user.toString()];
                 if (auxUsername == null) {
-                    auxUsername = await AccountModel.findById(user, "username") as account;
+                    auxUsername = (await AccountModel.findById(user, "username") as account).username;
                     userCache[user.toString()] = auxUsername.username;
                 }
-                auxUsers.push(auxUsername.username);
+                auxUsers.push(auxUsername);
             }
             response.games.push({
                 name: currentGame.name,

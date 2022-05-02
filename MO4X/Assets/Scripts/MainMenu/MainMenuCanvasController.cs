@@ -94,7 +94,7 @@ public class MainMenuCanvasController : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("name", gameNameString);
         form.AddField("numberOfPlayers", numberOfPlayersString);
-        form.AddField("users", ConexionController.instance.getUserId());
+        form.AddField("userId", ConexionController.instance.getUserId());
 
         UnityWebRequest request = UnityWebRequest.Post(ConexionController.instance.getConexionEndPoint() + "/createGame", form);
         UnityWebRequestAsyncOperation requestHandler = request.SendWebRequest();
@@ -129,6 +129,12 @@ public class MainMenuCanvasController : MonoBehaviour
                 Debug.Log(response.msg);
             }
             else if (response.code == 2)
+            {
+                createGameHelperText.text = response.msg;
+                createGameButton.interactable = true;
+                Debug.Log(response.msg);
+            }
+            else if (response.code == 3)
             {
                 createGameHelperText.text = response.msg;
                 createGameButton.interactable = true;
