@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 const Account = mongoose.model('Account');
-
 const argon = require('argon2-ffi').argon2i;
 const crypto = require('crypto');
-const { response } = require('express');
 
 const passwordRegex = new RegExp("(?=.*[A-Za-z])(?=.*[0-9])(?=.{5,32})");
 

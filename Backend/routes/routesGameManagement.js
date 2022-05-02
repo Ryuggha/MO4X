@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const Game = mongoose.model('Game');
 const Account = mongoose.model('Account');
-const { response } = require('express');
+const gameGenerator = require('../domain/gameGenerator');
+
 
 const maxPlayers = 16;
 
@@ -99,7 +100,7 @@ module.exports = app => {
         res.send(response);
 
         if (game.numberOfPlayers <= game.users.length) {
-            console.log("Implementation of emplenishment of games not done");
+            gameGenerator.createStellarMap();
         }
 
         game.users.push(user._id);
