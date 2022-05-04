@@ -1,6 +1,6 @@
 import { Application } from "express";
 import mongoose from "mongoose";
-import gameGenerator from "../Domain/gameGenerator";
+import gameGenerator from "../domain/gameGenerator";
 const AccountModel = mongoose.model('Account');
 import account from "../model/Account";
 const GameModel = mongoose.model('Game');

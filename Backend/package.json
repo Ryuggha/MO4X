@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsc-watch --onSuccess \"npx nodemon ./build/server.js\"",
     "production": "node ./build/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tsc-watch --onSuccess \"npx nodemon ./build/test.js\""
   },
   "author": "Ryuggha",
   "license": "ISC",
