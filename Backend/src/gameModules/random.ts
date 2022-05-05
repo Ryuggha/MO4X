@@ -22,5 +22,16 @@ export default class Random {
         if (Random.randomInt(0, 1) === 0) return true;
         else return false;
     }
+
+    static randomCelestialObjectNameChar(): string {
+        const characters = 'abcdefghijklmnopqrstuvwxyz';
+        const numbers = '0123456789';
+        if (Random.radnomPerCent() < 75) {
+            return numbers.charAt(Random.randomInt(0, numbers.length - 1));
+        }
+        else {
+            return characters.charAt(Random.randomInt(0, characters.length - 1));
+        }
+    }
     
 }

@@ -1,6 +1,6 @@
 import { Application } from "express";
 import mongoose from "mongoose";
-import gameGenerator from "../domain/gameGenerator";
+import {createStellarMap} from "../domain/gameGenerator";
 const AccountModel = mongoose.model('Account');
 import account from "../model/Account";
 const GameModel = mongoose.model('Game');
@@ -127,7 +127,7 @@ export = (app: Application) => {
         res.send(response);
 
         if (game.numberOfPlayers <= game.users.length) {
-            gameGenerator.createStellarMap();
+            createStellarMap();
         }
 
         game.users.push(user._id);

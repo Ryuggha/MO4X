@@ -1,8 +1,8 @@
-import StarType from "./starType";
-import Random from './random';
-import { randomInt } from "crypto";
-import Lerp from "./lerp";
-import Planet from "./planet";
+import StarType from "./StarType";
+import Random from './Random';
+import Lerp from "./Lerp";
+import Planet from "./Planet";
+import { random } from "lodash";
 
 interface starInfo {
     prefix: string,
@@ -138,7 +138,7 @@ class Star {
         if (name == null) {
             this.name = starInfo.prefix;
             for (let i = 0; i < 6; i++) {
-                this.name += randomChar();
+                this.name += Random.randomCelestialObjectNameChar();
             }
         } else {
             this.name = name;
@@ -167,7 +167,9 @@ class Star {
         }
     }
 
-    
+    getEnergy(): number {
+        return (this.mass * this.energyQuoficient) / this.radius;
+    }
 }
 
 class Orbit {
@@ -180,18 +182,17 @@ class Orbit {
         this.star = star;
         this.orbitIndex = orbitIndex;
         this.orbitEnergyQuoficient = orbitEnergyQuoficient;
+        this.planet = undefined;
+        if (Random.randomPerOne() < 1/3) {
+            this.planet = new Planet();
+        }
+    }
+
+    getOrbitalEnergy() {
+        return (this.star.mass * this.orbitEnergyQuoficient) / this.star.radius;
     }
 }
 
-function randomChar(): string {
-    const characters = 'abcdefghijklmnopqrstuvwxyz';
-    const numbers = '0123456789';
-    if (Random.radnomPerCent() < 75) {
-        return numbers.charAt(Random.randomInt(0, numbers.length - 1));
-    }
-    else {
-        return characters.charAt(Random.randomInt(0, characters.length - 1));
-    }
-}
+
 
 export default Star;
