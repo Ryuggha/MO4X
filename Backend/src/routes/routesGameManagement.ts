@@ -1,10 +1,12 @@
 import { Application } from "express";
 import mongoose from "mongoose";
+import CreateStarSystem from "../dataBaseModules/createStarSystem";
+import { dropGame } from "../dataBaseModules/dropGame";
 import {createStellarMap} from "../domain/gameGenerator";
 const AccountModel = mongoose.model('Account');
-import account from "../model/Account";
+import accountSchemaInterface from "../model/AccountModel";
 const GameModel = mongoose.model('Game');
-import game from "../model/Game";
+import gameSchemaInterface from "../model/GameModel";
 import { response } from "./responseInterface";
 
 
@@ -21,8 +23,6 @@ export = (app: Application) => {
             msg: ""
         }
 
-        
-
         const { name, userId, numberOfPlayers } = req.body;
         if (userId == null) {
             response.code = 1;
@@ -30,7 +30,7 @@ export = (app: Application) => {
             res.send(response);
             return;
         }
-        var user = await AccountModel.findById(new mongoose.Types.ObjectId(userId), '_id') as account;
+        var user = await AccountModel.findById(new mongoose.Types.ObjectId(userId), '_id') as accountSchemaInterface;
         if (user == null) {
             response.code = 1;
             response.msg = "No players found";
@@ -56,7 +56,7 @@ export = (app: Application) => {
         var searchBool = false;
         while (!searchBool) {
             inviteCode = Math.random().toString(36).substring(2, 10);
-            var a = await GameModel.findOne({actualTurn: -1, inviteCode: inviteCode}) as game;
+            var a = await GameModel.findOne({actualTurn: -1, inviteCode: inviteCode}) as gameSchemaInterface;
             if (a == null) searchBool = true;
         }
 
@@ -65,7 +65,7 @@ export = (app: Application) => {
             numberOfPlayers: numberOfPlayers,
             users: user._id,
             inviteCode: inviteCode,
-            stars: ["a", "b"],
+            stars: [],
             actualTurn: -1
         })
         await newGame.save();
@@ -91,7 +91,7 @@ export = (app: Application) => {
             return;
         }
                 
-        var game = await GameModel.findOne({inviteCode: inviteCode}) as game;
+        var game = await GameModel.findOne({inviteCode: inviteCode}) as gameSchemaInterface;
         if (game == null) {
             response.code = 2;
             response.msg = "Game not found for code "+ inviteCode;
@@ -106,7 +106,7 @@ export = (app: Application) => {
             return;
         }
 
-        var user = await AccountModel.findById(new mongoose.Types.ObjectId(userId), 'username _id') as account;
+        var user = await AccountModel.findById(new mongoose.Types.ObjectId(userId), 'username _id') as accountSchemaInterface;
         if (user == null) {
             response.code = 4;
             response.msg = "No such user with that ID";
@@ -126,12 +126,15 @@ export = (app: Application) => {
         response.gameName = game.name;
         res.send(response);
 
-        if (game.numberOfPlayers <= game.users.length) {
-            createStellarMap();
-        }
-
         game.users.push(user._id);
         await game.save();
+
+        if (game.numberOfPlayers <= game.users.length) {
+            game.actualTurn = 0;
+            await game.save();
+            let starMap = createStellarMap();
+            CreateStarSystem(starMap, game);
+        }
 
         return;
     });
@@ -151,7 +154,7 @@ export = (app: Application) => {
             return;
         }
 
-        let games = await GameModel.find({users: new mongoose.Types.ObjectId(userId)}, "name users inviteCode actualTurn _id numberOfPlayers") as game[];
+        let games = await GameModel.find({users: new mongoose.Types.ObjectId(userId)}, "name users inviteCode actualTurn _id numberOfPlayers") as gameSchemaInterface[];
         if (games == null) {
             response.code = 1;
             response.msg = "games not found";
@@ -167,7 +170,7 @@ export = (app: Application) => {
                 
                 let auxUsername = userCache[user.toString()];
                 if (auxUsername == null) {
-                    auxUsername = (await AccountModel.findById(user, "username") as account).username;
+                    auxUsername = (await AccountModel.findById(user, "username") as accountSchemaInterface).username;
                     userCache[user.toString()] = auxUsername.username;
                 }
                 auxUsers.push(auxUsername);
@@ -202,7 +205,7 @@ export = (app: Application) => {
             return;
         }
 
-        let user = await AccountModel.findById(new mongoose.Types.ObjectId(userId)) as account;
+        let user = await AccountModel.findById(new mongoose.Types.ObjectId(userId)) as accountSchemaInterface;
         if (user == null) {
             response.code = 2;
             response.msg = "User Id Unknown";
@@ -210,7 +213,7 @@ export = (app: Application) => {
             return;
         }
 
-        let game = await GameModel.findById(new mongoose.Types.ObjectId(gameId)) as game;
+        let game = await GameModel.findById(new mongoose.Types.ObjectId(gameId)) as gameSchemaInterface;
         if (game == null) {
             response.code = 3;
             response.msg = "Game Id Unknown";
@@ -229,7 +232,9 @@ export = (app: Application) => {
         res.send(response);
 
         if (game.users.length <= 0) {
-            await game.delete();
+            await dropGame(game._id);
         }
+
+        return;
     });
 }

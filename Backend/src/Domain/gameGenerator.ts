@@ -2,7 +2,7 @@ import Random from "../gameModules/Random";
 import SpaceLocation from "../gameModules/SpaceLocation";
 import Vector2 from "../gameModules/Vector2";
 
-let numberOfStars = 100;
+let numberOfStars = 15;
 let minimumVoidDistance = 1;
 let maximumVoidDistance = 3;
 

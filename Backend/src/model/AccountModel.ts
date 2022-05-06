@@ -16,7 +16,7 @@ const accountSchema = new Schema({
 
 mongoose.model('Account', accountSchema);
 
-export default interface account extends mongoose.Document {
+export default interface accountSchemaInterface extends mongoose.Document {
     username: string,
     password: string,
     email?: string,

@@ -30,12 +30,12 @@ const gameSchema = new Schema({
 
 mongoose.model('Game', gameSchema);
 
-export default interface game extends mongoose.Document {
+export default interface gameSchemaInterface extends mongoose.Document {
     name?: string,
     numberOfPlayers: number,
     users: mongoose.Types.ObjectId[],
     inviteCode?: string,
-    //stars?: Star[],
+    stars?: mongoose.Types.ObjectId[],
     //turnCacheList: turn[],
     actualTurn?: number
 };

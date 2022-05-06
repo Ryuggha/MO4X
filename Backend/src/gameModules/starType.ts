@@ -1,4 +1,4 @@
-const enum starType {
+const enum StarType {
     RedDwarf,
     YellowDwarf,
     BlueGiant,
@@ -9,4 +9,4 @@ const enum starType {
     BinarySystem,
 };
 
-export default starType;
+export default StarType;

@@ -1,6 +1,6 @@
-const enum planetType {
+const enum PlanetType {
     terrestrial,
     gaseous,
 };
 
-export default planetType;
+export default PlanetType;

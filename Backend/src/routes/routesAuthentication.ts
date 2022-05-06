@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 const AccountModel = mongoose.model('Account');
-import account from "../model/Account";  
+import accountSchemaInterface from "../model/AccountModel";  
 const argon = require('argon2-ffi').argon2i;
 import crypto from 'crypto';
 import { Application } from "express";
@@ -26,7 +26,7 @@ export = (app: Application) => {
             return;
         }
 
-        let userAccount = await AccountModel.findOne({ username: username }, 'username password _id') as account;
+        let userAccount = await AccountModel.findOne({ username: username }, 'username password _id') as accountSchemaInterface;
         if (userAccount == null) {
             response.code = 1;
             response.msg = "Invalid Credentials"
@@ -54,7 +54,6 @@ export = (app: Application) => {
 
         app.post('/singin', async (req, res) => {
         
-            console.log("----");
             let response: response = {
                 code: -1,
                 msg: ""
@@ -82,7 +81,7 @@ export = (app: Application) => {
                 return;
             }
     
-            let findEmailAccountOnDB = await AccountModel.findOne({ email: email }, 'email') as account;
+            let findEmailAccountOnDB = await AccountModel.findOne({ email: email }, 'email') as accountSchemaInterface;
             if (findEmailAccountOnDB != null) {
                 response.code = 2;
                 response.msg = "This email already exists"
@@ -90,7 +89,7 @@ export = (app: Application) => {
                 return;
             }
     
-            let findUsernameAccountOnDB = await AccountModel.findOne({ username: username }, 'username') as account;
+            let findUsernameAccountOnDB = await AccountModel.findOne({ username: username }, 'username') as accountSchemaInterface;
             if (findUsernameAccountOnDB != null) {
                 response.code = 3;
                 response.msg = "This username already exists"
