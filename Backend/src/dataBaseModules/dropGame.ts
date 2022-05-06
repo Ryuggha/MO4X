@@ -5,28 +5,29 @@ import StarSchemaInterface from "../model/StarModel";
 const GameSchema = mongoose.model("Game");
 const StarSchema = mongoose.model('Star');
 const OrbitSchema = mongoose.model('Orbit');
-const PlanetScema = mongoose.model('Planet');
+const PlanetSchema = mongoose.model('Planet');
 
 export async function dropGame(id: mongoose.Types.ObjectId) {
     
     let game = await GameSchema.findById(id) as gameSchemaInterface;
     if (game == null) return;
-    for (const starId of game.stars!) {
-        
-        let star = await StarSchema.findById(starId) as StarSchemaInterface;
+    let stars = await StarSchema.find({ '_id': { $in: game.stars } }) as StarSchemaInterface[];
+    
+    for (const star of stars) {
+        let orbits = await OrbitSchema.find({ '_id': { $in: star.orbits}}) as OrbitSchemaInterface[];
 
-        for (const orbitId of star.orbits) {
-            let orbit = await OrbitSchema.findById(orbitId) as OrbitSchemaInterface;
+        for (const orbit of orbits) {
             if (orbit.planet != undefined) {
                 console.log("Ships deletion not compleated");
-                await (await PlanetScema.findById(orbit.planet))?.delete();
+                await PlanetSchema.findByIdAndDelete(orbit.planet);
             }
-            await orbit.delete();
         }
 
-        await star.delete();
-
+        await OrbitSchema.deleteMany({ '_id': { $in: star.orbits}});
     }
 
+    await StarSchema.deleteMany({ '_id': { $in: game.stars } });
+
     game.delete();
+
 }

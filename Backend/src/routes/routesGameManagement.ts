@@ -2,6 +2,7 @@ import { Application } from "express";
 import mongoose from "mongoose";
 import CreateStarSystem from "../dataBaseModules/createStarSystem";
 import { dropGame } from "../dataBaseModules/dropGame";
+import LoadGame from "../dataBaseModules/LoadGame";
 import {createStellarMap} from "../domain/gameGenerator";
 const AccountModel = mongoose.model('Account');
 import accountSchemaInterface from "../model/AccountModel";
@@ -236,5 +237,41 @@ export = (app: Application) => {
         }
 
         return;
+    });
+
+    app.post('/loadGame', async (req: any, res) => {
+        let response: response = {
+            code: -1,
+            msg: ""
+        }
+
+        const { userId, gameId } = req.body;
+        if (userId == null || gameId == null) {
+            response.code = 1;
+            response.msg = "Bad Client Error";
+            res.send(response);
+            return;
+        }
+
+        let user = await AccountModel.findById(new mongoose.Types.ObjectId(userId)) as accountSchemaInterface;
+        if (user == null) {
+            response.code = 2;
+            response.msg = "User Id Unknown";
+            res.send(response);
+            return;
+        }
+
+        let game = await GameModel.findById(new mongoose.Types.ObjectId(gameId)) as gameSchemaInterface;
+        if (game == null) {
+            response.code = 3;
+            response.msg = "Game Id Unknown";
+            res.send(response);
+            return;
+        }
+
+        response.code = 0;
+        response.msg = "Game Loaded Successfully";
+
+        response.game = LoadGame(user, game);
     });
 }
