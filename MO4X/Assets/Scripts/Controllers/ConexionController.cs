@@ -15,7 +15,7 @@ public class ConexionController : MonoBehaviour
 
     private void Awake()
     {
-        if (SceneController.instance != null)
+        if (ConexionController.instance != null)
         {
             Destroy(gameObject);
         }

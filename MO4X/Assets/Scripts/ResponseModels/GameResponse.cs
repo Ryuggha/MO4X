@@ -7,4 +7,5 @@ public class GameResponse
     public int numberOfPlayers;
     public string inviteCode;
     public int actualTurn;
+    public StarResponse[] stars;
 }

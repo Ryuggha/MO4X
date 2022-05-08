@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2731504598843211902}
   - component: {fileID: 7209211095467532435}
   - component: {fileID: 3863489272350793674}
+  - component: {fileID: 5291786283055017580}
   m_Layer: 0
   m_Name: ControllerCollection
   m_TagString: Untagged
@@ -54,5 +55,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a675cb6324ff81442845fd912eab6b55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  conexionEndPoint: http://127.0.0.1:13756
+  userName: 
+  userId: 
+--- !u!114 &5291786283055017580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6918475466025680767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f83ee3384bc4314cb448338f1dd87a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -122,19 +122,20 @@ export = (app: Application) => {
             return;
         }
 
+        game.users.push(user._id);
+        await game.save();
+
         response.code = 0;
         response.msg = "Join Successful";
         response.gameName = game.name;
         res.send(response);
 
-        game.users.push(user._id);
-        await game.save();
-
         if (game.numberOfPlayers <= game.users.length) {
             game.actualTurn = 0;
-            await game.save();
             let starMap = createStellarMap();
-            CreateStarSystem(starMap, game);
+            await CreateStarSystem(starMap, game);
+
+            await game.save();
         }
 
         return;
@@ -269,9 +270,16 @@ export = (app: Application) => {
             return;
         }
 
+        
+
         response.code = 0;
         response.msg = "Game Loaded Successfully";
 
-        response.game = LoadGame(user, game);
+        response.game = await LoadGame(user, game);
+        console.log(response.game);
+
+        res.send(response);
+
+        return;
     });
 }
