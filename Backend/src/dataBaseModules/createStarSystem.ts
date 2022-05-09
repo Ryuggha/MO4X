@@ -1,12 +1,11 @@
 import mongoose from "mongoose";
-let PlanetType = require("../gameModules/PlannetType");
+import PlanetType from "../gameModules/PlannetType";
 import SpaceLocation from "../gameModules/SpaceLocation";
-let StarType = require("../gameModules/StarType");
+import StarType from "../gameModules/StarType";
 import gameSchemaInterface from "../model/GameModel";
 import OrbitSchemaInterface from "../model/OrbitModel";
 import PlanetSchemaInterface from "../model/PlanetModel";
 import StarSchemaInterface from "../model/StarModel";
-const GameModel = mongoose.model('Game');
 const StarModel = mongoose.model('Star');
 const OrbitModel = mongoose.model('Orbit');
 const PlanetModel = mongoose.model('Planet');
@@ -33,7 +32,7 @@ export default async function CreateStarSystem (starMap: SpaceLocation[], game: 
                 let planetModel = new PlanetModel({
                     _id: new mongoose.Types.ObjectId(),
                     name: orbit.planet.name,
-                    planetType: PlanetType[orbit.planet.typeOfPlannet],
+                    planetType: planetTypeToString(orbit.planet.typeOfPlanet),
                     mass: orbit.planet.mass,
                     radius: orbit.planet.radius
                 }) as PlanetSchemaInterface;
@@ -55,7 +54,7 @@ export default async function CreateStarSystem (starMap: SpaceLocation[], game: 
             mass: l.star.mass,
             radius: l.star.radius,
             energyQ: l.star.energyQuoficient,
-            starType: StarType[l.star.type],
+            starType: starTypeToString(l.star.type),
             orbits: starOrbitsIdArray,
         }) as StarSchemaInterface;
         starsToSave.push(starModel);
@@ -69,4 +68,22 @@ export default async function CreateStarSystem (starMap: SpaceLocation[], game: 
     await StarModel.bulkSave(starsToSave);
 
     await game.save();
+}
+
+function starTypeToString(t: StarType): string {
+    if (t === StarType.RedDwarf) return 'RedDwarf'
+    if (t === StarType.YellowDwarf) return 'YellowDwarf'
+    if (t === StarType.BlueGiant) return 'BlueGiant'
+    if (t === StarType.RedGiant) return 'RedGiant'
+    if (t === StarType.NeutronStar) return 'NeutronStar'
+    if (t === StarType.BlackHole) return 'BlackHole'
+    if (t === StarType.BlockHoleAccDisc) return 'BlockHoleAccDisc'
+    if (t === StarType.BinarySystem) return 'BinarySystem'
+    return "Unknown StarType";
+}
+
+function planetTypeToString(t: PlanetType): string {
+    if (t === PlanetType.terrestrial) return 'terrestrial'
+    if (t === PlanetType.gaseous) return 'gaseous'
+    return "Unknown PlanetType"
 }

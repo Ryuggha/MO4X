@@ -17,7 +17,14 @@ public class StellarGenerator : MonoBehaviour
 
         foreach (var star in game.stars)
         {
-            Instantiate(starPrefab, new Vector2(star.xPos, star.yPos), Quaternion.identity);
+            GameObject o = Instantiate(starPrefab, new Vector2(star.xPos, star.yPos), Quaternion.identity);
+            o.transform.parent = transform;
+
         }
+    }
+
+    public void back()
+    {
+        SceneController.instance.changeScene("MainMenu");
     }
 }

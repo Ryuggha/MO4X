@@ -2,9 +2,9 @@ import Random from "../gameModules/Random";
 import SpaceLocation from "../gameModules/SpaceLocation";
 import Vector2 from "../gameModules/Vector2";
 
-let numberOfStars = 200;
+let numberOfStars = 1000;
 let minimumVoidDistance = 1;
-let maximumVoidDistance = 3;
+let maximumVoidDistance = 4;
 
 export function createStellarMap (): SpaceLocation[] {
     let starMap: SpaceLocation[] = [];

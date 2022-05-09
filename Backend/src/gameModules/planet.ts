@@ -34,10 +34,10 @@ export default class Planet {
     readonly name: string = "Unnamed Planet";
     readonly mass: number = -1;
     readonly radius: number = -1;
-    readonly typeOfPlannet: PlanetType = PlanetType.terrestrial;
+    readonly typeOfPlanet: PlanetType = PlanetType.terrestrial;
 
-    constructor (name?: string, mass?: number, radius?: number, typeOfPlannet?: PlanetType) {
-        if (typeOfPlannet == null) {
+    constructor (name?: string, mass?: number, radius?: number, typeOfPlanet?: PlanetType) {
+        if (typeOfPlanet == null) {
             let totalWeight = 0;
             for (const i of Planet.planetMap.values()) {
                 totalWeight += i.weight;
@@ -48,15 +48,15 @@ export default class Planet {
             for (const key of Planet.planetMap.keys()) {
                 actualWeight += Planet.planetMap.get(key)!.weight;
                 if (rndmTypeValue < actualWeight) {
-                    this.typeOfPlannet = key;
+                    this.typeOfPlanet = key;
                     break;
                 }
             }
         } else {
-            this.typeOfPlannet = typeOfPlannet
+            this.typeOfPlanet = typeOfPlanet
         }
 
-        let planetInfo = Planet.planetMap.get(this.typeOfPlannet);
+        let planetInfo = Planet.planetMap.get(this.typeOfPlanet);
         if (planetInfo == null) { return; }
 
         if (name == null) {

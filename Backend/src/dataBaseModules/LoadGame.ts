@@ -4,7 +4,7 @@ import gameSchemaInterface from "../model/GameModel";
 import OrbitSchemaInterface from "../model/OrbitModel";
 import PlanetSchemaInterface from "../model/PlanetModel";
 import StarSchemaInterface from "../model/StarModel";
-const GameModel = mongoose.model('Game');
+import ObjectId from "./ObjectId";
 const StarModel = mongoose.model('Star');
 const OrbitModel = mongoose.model('Orbit');
 const PlanetModel = mongoose.model('Planet');
@@ -36,15 +36,51 @@ class GameResponse {
     async init (game: gameSchemaInterface) {
         let auxStars = await StarModel.find({_id: {$in: game.stars}}) as StarSchemaInterface[];
 
-        for (const star of auxStars) {
-            let aux = new StarResponse(star);
-            await aux.init(star);
-            this.stars.push(aux);
-        }
-    }
+        let orbitIdList: ObjectId[] = [];
 
-    addStar(star: StarResponse) {
-        this.stars.push(star);
+        for (const star of auxStars) {
+            orbitIdList = orbitIdList.concat(star.orbits);
+        }
+
+        let orbitInterfaces = await OrbitModel.find({_id: {$in: orbitIdList}}) as OrbitSchemaInterface[];
+
+        let orbitMap = new Map<string, OrbitSchemaInterface>(
+             orbitInterfaces.map(o => {
+                 return [o._id.toString(), o]
+             }));
+        let planetIdList: ObjectId[] = [];
+
+        for (const orbit of orbitMap.values()) {
+            if (orbit.planet != null) planetIdList.push(orbit.planet);
+        }
+
+        let planetMap = new Map<string, PlanetSchemaInterface>(
+            (await PlanetModel.find({_id: {$in: planetIdList}}) as PlanetSchemaInterface[]).map(o => {
+                return [o._id.toString(), o]
+            })); 
+        
+        // Populate
+
+        for (const star of auxStars) {
+            let starResponse = new StarResponse(star);
+            
+            for (const orbit of star.orbits) {
+                
+                let auxOrbit = orbitMap.get(orbit.toString());
+                if (auxOrbit != null) {
+                    let orbitResponse = new OrbitResponse(starResponse, auxOrbit);
+                    
+                    
+                    if (auxOrbit.planet != null && planetMap.get(auxOrbit.planet.toString()) != null) {
+                        orbitResponse.planet = new PlanetResponse(planetMap.get(auxOrbit.planet.toString())!);
+                    }
+                    
+                    starResponse.orbits.push(orbitResponse);
+                }
+            }
+
+            this.stars.push(starResponse);
+        }
     }
 }
 
@@ -65,18 +101,8 @@ class StarResponse {
             this.starType = star.starType;
             this.mass = star.mass;
             this.radius = star.radius;
-            this.energyEmission = Math.round((star.energyQ * star.mass) / star.radius);
+            this.energyEmission = (star.energyQ * star.mass) / star.radius;
             this.orbits = [];
-    }
-
-    async init(star: StarSchemaInterface) {
-        let auxOrbits = await OrbitModel.find({_id: {$in: star.orbits}}) as OrbitSchemaInterface[];
-
-        for (const orbit of auxOrbits) {
-            let aux = new OrbitResponse(this, orbit);
-            await aux.init(orbit);
-            this.orbits.push(aux);
-        }
     }
 }
 
@@ -87,15 +113,7 @@ class OrbitResponse {
 
     constructor (star: StarResponse, orbit: OrbitSchemaInterface) {
         this.index = orbit.index;
-        this.energyRecieved = Math.round((orbit.orbitalQ * star.mass) / star.radius);
-    }
-
-    async init(orbit: OrbitSchemaInterface) {
-        let aux = await PlanetModel.findById(orbit.planet) as PlanetSchemaInterface;
-        if (aux != null) {
-            this.planet = new PlanetResponse(aux);
-        }
-        
+        this.energyRecieved = (orbit.orbitalQ * star.mass) / star.radius;
     }
 }
 

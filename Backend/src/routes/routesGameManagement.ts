@@ -269,15 +269,13 @@ export = (app: Application) => {
             res.send(response);
             return;
         }
-
         
-
         response.code = 0;
         response.msg = "Game Loaded Successfully";
 
+        console.time('a');
         response.game = await LoadGame(user, game);
-        console.log(response.game);
-
+        console.timeEnd('a');
         res.send(response);
 
         return;

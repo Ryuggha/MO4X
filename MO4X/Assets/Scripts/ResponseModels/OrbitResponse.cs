@@ -2,6 +2,6 @@
 public class OrbitResponse
 {
     public int index;
-    public int energyRecieved;
+    public float energyRecieved;
     public PlanetResponse planet;
 }

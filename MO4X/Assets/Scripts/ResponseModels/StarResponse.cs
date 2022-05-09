@@ -7,6 +7,6 @@ public class StarResponse
     public string starType;
     public float mass;
     public float radius;
-    public int actualEmission;
+    public float energyEmission;
     public OrbitResponse[] orbits;
 }
