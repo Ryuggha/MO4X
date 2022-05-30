@@ -7,7 +7,7 @@ export = (app: Application) => {
 
         //Start Test Here
 
-        await dropGame(new mongoose.Types.ObjectId('6279420c33f4a4730d6cd9d8'));
+        await dropGame(new mongoose.Types.ObjectId('62955179aed20f153a922a1e'));
         console.log('drop complete...');
 
         //End of test

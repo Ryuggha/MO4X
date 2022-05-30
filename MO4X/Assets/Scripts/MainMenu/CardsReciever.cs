@@ -49,27 +49,32 @@ public class CardsReciever : MonoBehaviour
 
                     controller.setCard(game, canvasController);
                 }
+                canvasController.reenableReloadButton();
             }
             else if (response.code == 1)
             {
                 Debug.Log(response.msg);
                 canvasController.OnBackToMainMenuClick();
+                canvasController.reenableReloadButton();
             }
             else if (response.code == 2)
             {
                 Debug.Log(response.msg);
                 canvasController.OnBackToMainMenuClick();
+                canvasController.reenableReloadButton();
             }
             else
             {
                 Debug.Log(response.msg);
                 canvasController.OnBackToMainMenuClick();
+                canvasController.reenableReloadButton();
             }
         }
         else
         {
             Debug.Log("Unable to connect to the server...");
             canvasController.OnBackToMainMenuClick();
+            canvasController.reenableReloadButton();
         }
 
         yield return null;

@@ -13,6 +13,7 @@ public class MainMenuCanvasController : MonoBehaviour
 
     [Header("Create Game Objects")]
     [SerializeField] private Button createGameButton;
+    [SerializeField] private Button reloadButton;
     [SerializeField] private TextMeshProUGUI createGameHelperText;
     [SerializeField] private TMP_InputField numberOfPlayersField;
     [SerializeField] private TMP_InputField gameNameFeild;
@@ -77,6 +78,18 @@ public class MainMenuCanvasController : MonoBehaviour
         copyCodeButton.SetActive(false);
         inviteCodeText.text = "";
         inviteCode = "";
+    }
+
+    public void OnReloadGameCardsClick()
+    {
+        reloadButton.enabled = false;
+        OnBackToMainMenuClick();
+        OnShowCurrentGamesClick();
+    }
+
+    public void reenableReloadButton()
+    {
+        reloadButton.enabled = true;
     }
 
     public void OnCreateGameClick()

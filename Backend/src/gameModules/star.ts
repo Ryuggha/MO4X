@@ -3,6 +3,7 @@ import Random from './Random';
 import Lerp from "./Lerp";
 import Planet from "./Planet";
 import { random } from "lodash";
+import PlanetType from "./PlannetType";
 
 interface starInfo {
     prefix: string,
@@ -107,23 +108,29 @@ class Star {
     readonly type: StarType = StarType.RedDwarf;
     readonly orbits: Orbit[] = [];
 
-    constructor (name?: string, mass?: number, radius?: number, type?: StarType) {
+    constructor (homeSystem?:boolean, name?: string, mass?: number, radius?: number, type?: StarType) {
+        
         
         if (type == null) {
-            let totalWeight = 0;
-            for (const i of Star.starMap.values()) {
-                totalWeight += i.weight;
+            if (homeSystem != null && homeSystem == true) {
+                type == StarType.YellowDwarf;
             }
-
-            let rndmTypeValue = Random.randomFloat(0, totalWeight);
-            let actualWeight = 0;
-            for (const key of Star.starMap.keys()) {
-                let aux = Star.starMap.get(key);
-                if (aux != null) {
-                    actualWeight += aux.weight;
-                    if (rndmTypeValue < actualWeight) {
-                        this.type = key;
-                        break;
+            else {
+                let totalWeight = 0;
+                for (const i of Star.starMap.values()) {
+                    totalWeight += i.weight;
+                }
+    
+                let rndmTypeValue = Random.randomFloat(0, totalWeight);
+                let actualWeight = 0;
+                for (const key of Star.starMap.keys()) {
+                    let aux = Star.starMap.get(key);
+                    if (aux != null) {
+                        actualWeight += aux.weight;
+                        if (rndmTypeValue < actualWeight) {
+                            this.type = key;
+                            break;
+                        }
                     }
                 }
             }
@@ -136,10 +143,19 @@ class Star {
         if (starInfo == null) { return; }
 
         if (name == null) {
-            this.name = starInfo.prefix;
-            for (let i = 0; i < 6; i++) {
-                this.name += Random.randomCelestialObjectNameChar();
+            if (homeSystem != null && homeSystem == true) {
+                this.name = "HomeSystem: ";
+                for (let i = 0; i < 6; i++) {
+                    this.name += Random.randomCelestialObjectNameChar();
+                }
             }
+            else { 
+                this.name = starInfo.prefix;
+                for (let i = 0; i < 6; i++) {
+                    this.name += Random.randomCelestialObjectNameChar();
+                }
+            }
+                
         } else {
             this.name = name;
         }
@@ -163,7 +179,13 @@ class Star {
         this.orbits = [];
 
         for (let i = 0; i < starInfo.orbitalSlots.length; i++) {
-            this.orbits.push(new Orbit(this, i, starInfo.orbitalSlots[i]));
+            if (homeSystem != null && homeSystem == true && i == 2) {
+                this.orbits.push(new Orbit(this, i, starInfo.orbitalSlots[i], true));
+            }
+            else {
+                this.orbits.push(new Orbit(this, i, starInfo.orbitalSlots[i]));
+            }
+            
         }
     }
 
@@ -178,12 +200,14 @@ class Orbit {
     readonly orbitIndex: number;
     readonly orbitEnergyQuoficient: number;
 
-    constructor (star: Star, orbitIndex: number, orbitEnergyQuoficient: number) {
+    constructor (star: Star, orbitIndex: number, orbitEnergyQuoficient: number, homeSystem?: boolean) {
         this.star = star;
         this.orbitIndex = orbitIndex;
         this.orbitEnergyQuoficient = orbitEnergyQuoficient;
         this.planet = undefined;
-        if (Random.randomPerOne() < 1/3) {
+        if (homeSystem != null && homeSystem) {
+            this.planet = new Planet(PlanetType.terrestrial);
+        } else if (Random.randomPerOne() < 1/3) {
             this.planet = new Planet();
         }
     }

@@ -133,7 +133,7 @@ export = (app: Application) => {
         if (game.numberOfPlayers <= game.users.length) {
             game.actualTurn = 0;
             let starMap = createStellarMap();
-            await CreateStarSystem(starMap, game);
+            await CreateStarSystem(starMap, game, game.numberOfPlayers);
 
             await game.save();
         }

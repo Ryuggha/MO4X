@@ -36,7 +36,7 @@ export default class Planet {
     readonly radius: number = -1;
     readonly typeOfPlanet: PlanetType = PlanetType.terrestrial;
 
-    constructor (name?: string, mass?: number, radius?: number, typeOfPlanet?: PlanetType) {
+    constructor (typeOfPlanet?: PlanetType, name?: string, mass?: number, radius?: number) {
         if (typeOfPlanet == null) {
             let totalWeight = 0;
             for (const i of Planet.planetMap.values()) {

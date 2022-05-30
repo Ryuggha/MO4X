@@ -37,45 +37,6 @@ export function createStellarMap (): SpaceLocation[] {
     }
 
     return starMap;
-
-    /*let firstLocation = new Vector2(0, 0);
-    
-    let variance = 0;
-
-    while (getNoiseValue(noise, firstLocation, 16) > 0.6) {
-        firstLocation = new Vector2(Random.randomFloat(-variance, variance), Random.randomFloat(-variance, variance));
-        variance++;
-    }
-
-    starMap.push(new SpaceLocation(firstLocation));
-    starsLeft--;
-
-    while (starsLeft > 0) {
-        for (const location of starMap) { // 1 Attempt to create a Neighbour for each star
-            if (starsLeft > 0) {
-                let possibleLocation = location.location.plus(createVectorWithMaxModuleVoidDistance());
-                let noiseValue = getNoiseValue(noise, possibleLocation, 16);
-                if (Random.randomFloat(0.4, 1) < noiseValue) {
-
-                    let hasCollided = false;
-                    for (const possibleCollidingStar of starMap) { // Check no collisions with other stars
-                        let module = possibleLocation.minus(possibleCollidingStar.location).magnitude();
-                        if (module < minimumVoidDistance) {
-                            hasCollided = true;
-                            break;
-                        }
-                    }
-                    
-                    if (!hasCollided) {
-                        starMap.push(new SpaceLocation(possibleLocation));
-                        starsLeft--;
-                    }
-
-                }
-            }
-            else break;
-        }   
-    }*/ 
 }
 
 function getNoiseValue(noise: SimplexNoise, vector: Vector2, divider: number): number {
