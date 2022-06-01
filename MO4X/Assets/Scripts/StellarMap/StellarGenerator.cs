@@ -20,12 +20,13 @@ public class StellarGenerator : MonoBehaviour
             GameObject o = Instantiate(starPrefab, new Vector2(star.xPos, star.yPos), Quaternion.identity);
             o.transform.parent = transform;
             o.name = star.name;
-
+            o.GetComponent<StarCollider>().setStar(star, true);
         }
     }
 
     public void back()
     {
+        GameController.instance.setStar(null);
         SceneController.instance.changeScene("MainMenu");
     }
 }

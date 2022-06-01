@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 293549355}
   - component: {fileID: 293549358}
   - component: {fileID: 293549359}
+  - component: {fileID: 293549360}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -253,6 +254,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   screenPanModifier: -0.01
+--- !u!114 &293549360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293549354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c49b4cc203aa6414fae5c798d1d0e7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 64
+  m_MaxRayIntersections: 0
 --- !u!1001 &459142682
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -270,7 +287,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 857047458814654449, guid: de77abd23c483884a8fd306de883125e, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 857047458814654449, guid: de77abd23c483884a8fd306de883125e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -450,8 +467,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 459142683}
   - {fileID: 751854921}
+  - {fileID: 459142683}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -551,7 +568,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5081761637858708744, guid: 353c3bad63249244988350d0581cdc71, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5081761637858708744, guid: 353c3bad63249244988350d0581cdc71, type: 3}
       propertyPath: m_AnchorMax.x
@@ -687,7 +704,7 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1

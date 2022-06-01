@@ -8,6 +8,19 @@ public class CameraControls : MonoBehaviour
     Vector2 lastFramePos;
     bool lastFrameWasPresed;
 
+    private void Start()
+    {
+        StarResponse auxStar = GameController.instance.getActualStar();
+        if (auxStar == null)
+        {
+            print("Pendent of Implementation: Default Starting Position of Camera.");
+        }
+        else
+        {
+            transform.position = new Vector3(auxStar.xPos, auxStar.yPos, transform.position.z);
+        }
+    }
+
     private void Update()
     {
         if (InputManager.instance.getTouchscreenPressed())

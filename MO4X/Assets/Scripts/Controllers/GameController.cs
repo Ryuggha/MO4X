@@ -7,6 +7,7 @@ public class GameController : MonoBehaviour
     public static GameController instance;
 
     [SerializeField] private GameResponse gameView;
+    [SerializeField] private StarResponse actualStar;
 
     private void Awake()
     {
@@ -20,7 +21,9 @@ public class GameController : MonoBehaviour
             DontDestroyOnLoad(this);
         }
     }
-    
+
+   
+
     public void setGame(GameResponse game)
     {
         this.gameView = game;
@@ -29,5 +32,15 @@ public class GameController : MonoBehaviour
     public  GameResponse getGame()
     {
         return this.gameView;
+    }
+
+    public void setStar (StarResponse star)
+    {
+        this.actualStar = star;
+    }
+
+    public StarResponse getActualStar()
+    {
+        return this.actualStar;
     }
 }

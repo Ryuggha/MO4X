@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/StellarMap.unity
     guid: d1c8f45c83e0bcd4f9b50896e257b83e
+  - enabled: 1
+    path: Assets/Scenes/SystemView.unity
+    guid: 3eb4a370a9052e044b75393617fb14a4
   m_configObjects: {}
