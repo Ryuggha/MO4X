@@ -7,6 +7,8 @@ public class SceneController : MonoBehaviour
 {
     public static SceneController instance;
 
+    private bool chaningScene = false;
+
     private List<LoadingScreenAnimation> screens;
 
     private void Awake()
@@ -37,11 +39,15 @@ public class SceneController : MonoBehaviour
 
     public void changeScene(string sceneName)
     {
-        StartCoroutine(sceneChangeAfterLoadingScreen(sceneName));
+        if (!chaningScene) {
+            chaningScene = true;
+            StartCoroutine(sceneChangeAfterLoadingScreen(sceneName));
+        }
     }
 
     private IEnumerator sceneChangeAfterLoadingScreen(string sceneName)
     {
+
         searchLoadingScreens();
 
         for (int i = screens.Count - 1; i >= 0; i--)
@@ -55,8 +61,8 @@ public class SceneController : MonoBehaviour
                 screens[i].fadeIn();
             }
         }
-
         yield return new WaitForSeconds(.7f);
+        chaningScene = false;
         SceneManager.LoadScene(sceneName);
     }
 }

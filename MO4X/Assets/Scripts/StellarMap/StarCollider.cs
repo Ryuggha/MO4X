@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 public class StarCollider : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    private float timeToLongPress = 0.25f;
+    private float timeToLongPress = 0.15f;
     private bool accessibleStar;
     private StarResponse star;
     private float timePressed = 0;

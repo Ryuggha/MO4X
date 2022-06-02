@@ -43,3 +43,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e30fcd590c52cda4d844d8631b442995, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotationVelocity: -5
+  nameUI: {fileID: 0}
+  massUI: {fileID: 0}
+  luminosityUI: {fileID: 0}
+  orbitPrefab: {fileID: 1252220142427966500, guid: d2ea870adcfaf404c92143f8c9258065, type: 3}
+  terrestrialPlanets:
+  - {fileID: 429315695569319843, guid: 63d428a78a109c44ca468561e16d8986, type: 3}
+  gasPlanets:
+  - {fileID: 429315695569319843, guid: 63d428a78a109c44ca468561e16d8986, type: 3}

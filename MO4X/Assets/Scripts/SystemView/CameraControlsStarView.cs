@@ -1,25 +1,12 @@
 using UnityEngine;
 
-public class CameraControls : MonoBehaviour
+public class CameraControlsStarView : MonoBehaviour
 {
 
     public float screenPanModifier = -0.01f;
 
     Vector2 lastFramePos;
     bool lastFrameWasPresed;
-
-    private void Start()
-    {
-        StarResponse auxStar = GameController.instance.getActualStar();
-        if (auxStar == null || (auxStar != null && auxStar.name == ""))
-        {
-            print("Pendent of Implementation: Default Starting Position of Camera.");
-        }
-        else
-        {
-            transform.position = new Vector3(auxStar.xPos, auxStar.yPos, transform.position.z);
-        }
-    }
 
     private void Update()
     {
@@ -43,6 +30,6 @@ public class CameraControls : MonoBehaviour
 
     private void move(Vector2 vec)
     {
-        transform.position += new Vector3(Screen.width * vec.x, Screen.height * vec.y) * screenPanModifier;
+        transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y + (0.01f * Screen.width * vec.x * screenPanModifier), 0);
     }
 }
