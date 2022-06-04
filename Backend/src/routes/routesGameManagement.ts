@@ -1,8 +1,10 @@
 import { Application } from "express";
 import mongoose from "mongoose";
+import { actionListInterface, moveShip } from "../dataBaseModules/actionsInterface";
 import CreateStarSystem from "../dataBaseModules/createStarSystem";
 import { dropGame } from "../dataBaseModules/dropGame";
 import LoadGame from "../dataBaseModules/LoadGame";
+import ObjectId from "../dataBaseModules/ObjectId";
 import {createStellarMap} from "../domain/gameGenerator";
 const AccountModel = mongoose.model('Account');
 import accountSchemaInterface from "../model/AccountModel";
@@ -273,9 +275,23 @@ export = (app: Application) => {
         response.code = 0;
         response.msg = "Game Loaded Successfully";
 
-        response.game = await LoadGame(user, game);
+        response.game = await LoadGame(game);
         res.send(response);
 
+        return;
+    });
+
+    app.post('/endTurn', async (req: any, res) => {
+        let response: response = {
+            code: -1,
+            msg: "",
+        };
+
+        const actionList = JSON.parse(req.body.actionList) as actionListInterface;
+
+        console.log(actionList);
+
+        res.send(response);
         return;
     });
 }

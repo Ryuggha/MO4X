@@ -5,6 +5,13 @@ using UnityEngine;
 public class StellarGenerator : MonoBehaviour
 {
     [SerializeField] private GameObject starPrefab;
+    [SerializeField] private GameObject UIStarHelper;
+    [SerializeField] private Material allyColor;
+    [SerializeField] private Material enemyColor;
+    [SerializeField] private Material fightColor;
+
+    [SerializeField] private GameObject endTurnConfirmationObject;
+
 
     private void Start()
     {
@@ -21,6 +28,19 @@ public class StellarGenerator : MonoBehaviour
             o.transform.parent = transform;
             o.name = star.name;
             o.GetComponent<StarCollider>().setStar(star, true);
+
+            if (star.owner != "")
+            {
+                var uiHelper = Instantiate(UIStarHelper, o.transform);
+                if (star.owner == ConexionController.instance.getUsername())
+                {
+                    uiHelper.GetComponent<MeshRenderer>().material = allyColor;
+                }
+                else if (star.owner != ConexionController.instance.getUsername())
+                {
+                    uiHelper.GetComponent<MeshRenderer>().material = enemyColor;
+                }
+            }
         }
     }
 
@@ -28,5 +48,22 @@ public class StellarGenerator : MonoBehaviour
     {
         GameController.instance.setStar(null);
         SceneController.instance.changeScene("MainMenu");
+    }
+
+    public void OnEndTurnClick()
+    {
+        endTurnConfirmationObject.SetActive(true);
+    }
+
+    public void OnEndTurnConfirmation()
+    {
+        TurnHandler.instance.endTurn();
+        SceneController.instance.changeScene("MainMenu");
+        endTurnConfirmationObject.SetActive(false);
+    }
+
+    public void OnEndTurnDenegation()
+    {
+        endTurnConfirmationObject.SetActive(false);
     }
 }

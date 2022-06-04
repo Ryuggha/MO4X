@@ -1,18 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Planet : MonoBehaviour
+public class Planet : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    // Start is called before the first frame update
-    void Start()
+    private float timeToLongPress = 0.15f;
+    private float timePressed = 0;
+    private bool screenPressed;
+    public OrbitResponse orbit;
+
+    private SystemGenerator systemGenerator;
+
+    private void Awake()
     {
-        
+        systemGenerator = FindObjectOfType<SystemGenerator>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        if (screenPressed) timePressed += Time.deltaTime;
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        screenPressed = true;
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        screenPressed = false;
+        if (timePressed < timeToLongPress)
+        {
+            openPlanetCard();
+        }
+        timePressed = 0;
+    }
+
+    private void openPlanetCard()
+    {
+        systemGenerator.activatePlanetCard();
+        PlanetCardHandler.instance.setOrbit(orbit);
     }
 }

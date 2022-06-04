@@ -7,8 +7,10 @@ using TMPro;
 public class SystemGenerator : MonoBehaviour
 {
     [SerializeField] private float rotationVelocity = 1;
+    [SerializeField] private GameObject planetCardHandler;
 
     [Header("UIElements")]
+    [SerializeField] private TMP_InputField nameInputField;
     [SerializeField] private TextMeshProUGUI nameUI;
     [SerializeField] private TextMeshProUGUI massUI;
     [SerializeField] private TextMeshProUGUI luminosityUI;
@@ -22,6 +24,7 @@ public class SystemGenerator : MonoBehaviour
 
     private void Start()
     {
+
         star = GameController.instance.getActualStar();
 
         if (star != null && star.name != "") createStarSystem();
@@ -29,9 +32,19 @@ public class SystemGenerator : MonoBehaviour
 
     private void createStarSystem()
     {
+        if (star.owner == ConexionController.instance.getUsername()) nameInputField.interactable = true;
+        else nameInputField.interactable = false;
         nameUI.text = star.name;
-        massUI.text = star.mass.ToString("0.###");
-        luminosityUI.text = star.energyEmission.ToString("0.###");
+        massUI.text = (star.mass * 1000000000000000000000000000000f).ToString() + "Kg";
+        if (star.energyEmission > 1)
+        {
+            luminosityUI.text = Mathf.RoundToInt(10 * star.energyEmission).ToString() + "L";
+        }
+        else
+        {
+            luminosityUI.text = (10 * star.energyEmission).ToString("0.##") + "L";
+        }
+        
 
         float rotationFactor = rotationVelocity * Random.Range(0.9f, 1.1f); 
 
@@ -52,6 +65,7 @@ public class SystemGenerator : MonoBehaviour
                 }
 
                 var planetObject = Instantiate(auxPrefab, orbitObject.transform);
+                planetObject.GetComponent<Planet>().orbit = orbit;
                 float planetOffset = 5f + ((orbit.index * (13f / star.orbits.Length)) + ((13f / star.orbits.Length) / 2f));
                 planetObject.transform.localPosition = new Vector3(planetOffset, 0, 0);
                 orbitObject.transform.rotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
@@ -63,8 +77,24 @@ public class SystemGenerator : MonoBehaviour
         }
     }
 
+    public void OnChangeStarName()
+    {
+        string newName = nameInputField.text.Trim();
+        nameInputField.text = "";
+        if (newName.Length >= 3)
+        {
+            if (TurnHandler.instance.changeStarName(star, newName)) nameInputField.text = newName;
+        }
+        
+    }
+
     public void OnBackClick()
     {
         SceneController.instance.changeScene("StellarMap");
+    }
+
+    public void activatePlanetCard()
+    {
+        planetCardHandler.SetActive(true);
     }
 }

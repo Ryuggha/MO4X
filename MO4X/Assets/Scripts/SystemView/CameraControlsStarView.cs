@@ -3,6 +3,7 @@ using UnityEngine;
 public class CameraControlsStarView : MonoBehaviour
 {
 
+    [SerializeField] private GameObject planetCardHandlerObject;
     public float screenPanModifier = -0.01f;
 
     Vector2 lastFramePos;
@@ -10,22 +11,26 @@ public class CameraControlsStarView : MonoBehaviour
 
     private void Update()
     {
-        if (InputManager.instance.getTouchscreenPressed())
+        if (!planetCardHandlerObject.activeSelf)
         {
-            if (lastFrameWasPresed)
+            if (InputManager.instance.getTouchscreenPressed())
             {
-                move(InputManager.instance.getTouchscreenPos() - lastFramePos);
+                if (lastFrameWasPresed)
+                {
+                    move(InputManager.instance.getTouchscreenPos() - lastFramePos);
+                }
+
+                // ---
+
+                lastFramePos = InputManager.instance.getTouchscreenPos();
+                lastFrameWasPresed = true;
             }
-
-            // ---
-
-            lastFramePos = InputManager.instance.getTouchscreenPos();
-            lastFrameWasPresed = true;
+            else
+            {
+                lastFrameWasPresed = false;
+            }
         }
-        else
-        {
-            lastFrameWasPresed = false;
-        }
+        
     }
 
     private void move(Vector2 vec)

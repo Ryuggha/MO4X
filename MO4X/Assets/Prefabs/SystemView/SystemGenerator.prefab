@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationVelocity: -5
+  planetCardHandler: {fileID: 0}
   nameUI: {fileID: 0}
   massUI: {fileID: 0}
   luminosityUI: {fileID: 0}

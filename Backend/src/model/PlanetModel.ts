@@ -13,10 +13,18 @@ const planetSchema = new Schema({
     energy: {
         type: Number,
         default: 0,
-    }
+    },
+    
+    technologies: [{
+        type: String,
+        default: [],
+    }],
+    buildings: [{
+        type: String,
+        default: [],
+    }],
+
     //Ships
-    //Techs
-    //Buildings
 });
 
 mongoose.model('Planet', planetSchema);
@@ -27,5 +35,7 @@ export default interface PlanetSchemaInterface extends mongoose.Document {
     mass: number,
     radius: number,
     energy?: number,
+    technologies: [string],
+    buildings: [string],
     // Rest of Things
 }

@@ -6,4 +6,6 @@ public class PlanetResponse
     public float mass;
     public float radius;
     public int energy;
+    public string[] buildings;
+    public string[] technologies;
 }

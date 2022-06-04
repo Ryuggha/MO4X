@@ -206,7 +206,7 @@ class Orbit {
         this.orbitEnergyQuoficient = orbitEnergyQuoficient;
         this.planet = undefined;
         if (homeSystem != null && homeSystem) {
-            this.planet = new Planet(PlanetType.terrestrial);
+            this.planet = new Planet(true);
         } else if (Random.randomPerOne() < 1/3) {
             this.planet = new Planet();
         }

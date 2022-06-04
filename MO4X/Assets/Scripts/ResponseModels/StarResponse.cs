@@ -1,6 +1,7 @@
 [System.Serializable]
 public class StarResponse
 {
+    public string _id;
     public string name;
     public float xPos;
     public float yPos;
@@ -9,4 +10,5 @@ public class StarResponse
     public float radius;
     public float energyEmission;
     public OrbitResponse[] orbits;
+    public string owner;
 }

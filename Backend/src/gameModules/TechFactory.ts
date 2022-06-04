@@ -1,4 +1,4 @@
-import { BasicHull, BasicPlanetaryCamuflage, BasicPlanetaryDetector, BasicShipCamuflage, BasicShipDetector, BasicShipReactor, BasicThruster, BasicWeapon, Tech } from "./Tech";
+import { BasicHull, BasicPlanetaryCamuflage, BasicPlanetaryDetector, BasicShipCamuflage, BasicShipDetector, BasicShipReactor, BasicThruster, BasicWeapon, BuildingModule, solarEnergyGainBuilding, Tech } from "./Tech";
 
 interface TechFactoryOptions {
     name?: string,
@@ -44,6 +44,13 @@ function TechFactoryImplementation (name: string, tier: number): Tech | null {
         if (name === "Radio Detector") return new BasicPlanetaryDetector(name, 1, 5, 4);
         if (name === "Laser Interferometer") return new BasicPlanetaryDetector(name, 2, 2, 9);
         if (name === "Antimatter Detector") return new BasicPlanetaryDetector(name, 3, 1, 14);
+
+        if (name === "Hangar") return new BuildingModule(name, 0, 0);
+
+        if (name === "Thermal Panels") return new solarEnergyGainBuilding(name, 0, 0, 1);
+        if (name === "Solar Panels") return new solarEnergyGainBuilding(name, 0, 0, 5);
+        if (name === "Advanced Solar Panels") return new solarEnergyGainBuilding(name, 0, 0, 10);
+        if (name === "Solar Power Plant") return new solarEnergyGainBuilding(name, 0, 0, 20);
     }
     
 

@@ -33,12 +33,18 @@ export default async function CreateStarSystem (starMap: SpaceLocation[], game: 
             }) as OrbitSchemaInterface;
 
             if (orbit.planet != null) {
+                let technologyList: string[] = [];
+                for (const tech of orbit.planet.technologies) {
+                    technologyList.push(tech.name);
+                }
                 let planetModel = new PlanetModel({
                     _id: new mongoose.Types.ObjectId(),
                     name: orbit.planet.name,
                     planetType: planetTypeToString(orbit.planet.typeOfPlanet),
                     mass: orbit.planet.mass,
-                    radius: orbit.planet.radius
+                    radius: orbit.planet.radius,
+                    technologies: technologyList,
+                    buildings: orbit.planet.buildings,
                 }) as PlanetSchemaInterface;
                 planetsToSave.push(planetModel);
 
@@ -105,7 +111,6 @@ function setInitialPlayerSystems(starMap: SpaceLocation[], numberOfPlayers: numb
 
     for (let i = 0; i < numberOfPlayers; i++) {
         let homeSetted = false;
-        let numberOfTries = 0;
         let starIndex = -1;
 
         while (!homeSetted) {

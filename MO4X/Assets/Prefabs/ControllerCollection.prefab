@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3863489272350793674}
   - component: {fileID: 5291786283055017580}
   - component: {fileID: 9152669841443829792}
+  - component: {fileID: 4371690614086272160}
   m_Layer: 0
   m_Name: ControllerCollection
   m_TagString: Untagged
@@ -81,6 +82,16 @@ MonoBehaviour:
     inviteCode: 
     actualTurn: 0
     stars: []
+  actualStar:
+    name: 
+    xPos: 0
+    yPos: 0
+    starType: 
+    mass: 0
+    radius: 0
+    energyEmission: 0
+    orbits: []
+    owner: 
 --- !u!114 &9152669841443829792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91,5 +102,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5cb7170bf2a38cd41b960ac786e07088, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4371690614086272160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6918475466025680767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86e9f35a8ee0727439889f3df0f95b47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

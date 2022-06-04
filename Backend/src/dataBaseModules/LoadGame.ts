@@ -5,15 +5,25 @@ import OrbitSchemaInterface from "../model/OrbitModel";
 import PlanetSchemaInterface from "../model/PlanetModel";
 import StarSchemaInterface from "../model/StarModel";
 import ObjectId from "./ObjectId";
+const AccountModel = mongoose.model('Account');
 const StarModel = mongoose.model('Star');
 const OrbitModel = mongoose.model('Orbit');
 const PlanetModel = mongoose.model('Planet');
 
-export default async function LoadGame(user: accountSchemaInterface, game: gameSchemaInterface): Promise<any> {
+export default async function LoadGame(game: gameSchemaInterface): Promise<any> {
 
     console.log("Pending of Implementation: It has to load only what the player may need");
+
+    let userMap = new Map<string, string>();
+
+    let accounts = await AccountModel.find({_id: {$in: game.users}}) as accountSchemaInterface[];
+
+    for (const account of accounts) {
+        userMap.set(account._id.toString(), account.username);
+    }
+
     let r = new GameResponse(game);
-    await r.init(game);
+    await r.init(game, userMap);
     return r;
 
 }
@@ -33,7 +43,7 @@ class GameResponse {
         this.stars = [];
     }
 
-    async init (game: gameSchemaInterface) {
+    async init (game: gameSchemaInterface, userMap: Map<string, string>) {
         let auxStars = await StarModel.find({_id: {$in: game.stars}}) as StarSchemaInterface[];
 
         let orbitIdList: ObjectId[] = [];
@@ -62,7 +72,7 @@ class GameResponse {
         // Populate
 
         for (const star of auxStars) {
-            let starResponse = new StarResponse(star);
+            let starResponse = new StarResponse(star, userMap);
             
             for (const orbit of star.orbits) {
                 
@@ -85,6 +95,7 @@ class GameResponse {
 }
 
 class StarResponse {
+    _id: string;
     name: string;
     xPos: number;
     yPos: number;
@@ -93,8 +104,10 @@ class StarResponse {
     radius: number;
     energyEmission = 0;
     orbits: OrbitResponse[];
+    owner = "";
 
-    constructor (star: StarSchemaInterface) {
+    constructor (star: StarSchemaInterface, userMap: Map<string, string>) {
+            this._id = star._id.toString();
             this.name = star.name;
             this.xPos = star.xPos;
             this.yPos = star.yPos;
@@ -103,6 +116,12 @@ class StarResponse {
             this.radius = star.radius;
             this.energyEmission = (star.energyQ * star.mass) / star.radius;
             this.orbits = [];
+            let userId = star.userController;
+            if (userId == null) this.owner = "";
+            else {
+                let auxUsernameFromMap = userMap.get(userId.toString());
+                this.owner = auxUsernameFromMap != null? auxUsernameFromMap : "";
+            }
     }
 }
 
@@ -118,17 +137,27 @@ class OrbitResponse {
 }
 
 class PlanetResponse {
+    _id: string;
     name: string;
     planetType: string;
     mass: number;
     radius: number;
     energy = 0;
+    buildings: string[] = [];
+    technologies: string[] = [];
 
     constructor (planet: PlanetSchemaInterface) {
+        this._id = planet._id.toString();
         this.name = planet.name == null ? "" : planet.name;
         this.planetType = planet.planetType;
         this.mass = planet.mass;
         this.radius = planet.radius;
         this.energy = planet.energy == null ? 0 : planet.energy;
+        if (planet.buildings != null) {
+            this.buildings = planet.buildings;
+        }
+        if (planet.technologies != null) {
+            this.technologies = planet.technologies;
+        }
     }
 }

@@ -1,6 +1,8 @@
 import Lerp from "./Lerp";
 import PlanetType from "./PlannetType";
 import Random from "./Random";
+import { Tech } from "./Tech";
+import TechFactory from "./TechFactory";
 
 interface planetInfo {
     prefix: string,
@@ -16,18 +18,18 @@ export default class Planet {
         [PlanetType.terrestrial, {
             prefix: "EPT::",
             weight: 50,
-            massMin: 0.3,
-            massMax: 50,
-            diamaterMin: 750,
-            diamaterMax: 3250,
+            massMin: 0.02,
+            massMax: 10,
+            diamaterMin: 1000,
+            diamaterMax: 13000,
         }],
         [PlanetType.gaseous, {
             prefix: "EPG::",
             weight: 50,
-            massMin: 60,
+            massMin: 20,
             massMax: 3000,
-            diamaterMin: 5000,
-            diamaterMax: 50000
+            diamaterMin: 20000,
+            diamaterMax: 150000
         }],
     ]);
 
@@ -35,8 +37,14 @@ export default class Planet {
     readonly mass: number = -1;
     readonly radius: number = -1;
     readonly typeOfPlanet: PlanetType = PlanetType.terrestrial;
+    buildings: string[] = [];
+    technologies: Tech[] = [];
 
-    constructor (typeOfPlanet?: PlanetType, name?: string, mass?: number, radius?: number) {
+    constructor (homePlanet?: boolean, typeOfPlanet?: PlanetType, name?: string, mass?: number, radius?: number) {
+        if (homePlanet) {
+            typeOfPlanet = PlanetType.terrestrial;
+            this.colonizePlanet();
+        }
         if (typeOfPlanet == null) {
             let totalWeight = 0;
             for (const i of Planet.planetMap.values()) {
@@ -60,10 +68,19 @@ export default class Planet {
         if (planetInfo == null) { return; }
 
         if (name == null) {
-            this.name = planetInfo.prefix;
-            for (let i = 0; i < 10; i++) {
-                this.name += Random.randomCelestialObjectNameChar();
+            if (homePlanet) {
+                this.name = "Terra::";
+                for (let i = 0; i < 3; i++) {
+                    this.name += Random.randomCelestialObjectNameChar();
+                }
             }
+            else {
+                this.name = planetInfo.prefix;
+                for (let i = 0; i < 10; i++) {
+                    this.name += Random.randomCelestialObjectNameChar();
+                }
+            }
+            
         } else {
             this.name = name;
         }
@@ -80,6 +97,20 @@ export default class Planet {
             this.radius = Lerp(planetInfo.diamaterMin, planetInfo.diamaterMax, 0, 1, r);
         } else {
             this.radius = radius;
+        }
+    }
+
+    colonizePlanet() {
+        let hangar = TechFactory({name: "Hangar"});
+        if (hangar != null) {
+            this.technologies.push(hangar);
+            this.buildings.push(hangar.name);
+        }
+
+        let thermalPanels = TechFactory({name: "Thermal Panels"});
+        if (thermalPanels != null) {
+            this.technologies.push(thermalPanels);
+            this.buildings.push(thermalPanels.name);
         }
     }
 }

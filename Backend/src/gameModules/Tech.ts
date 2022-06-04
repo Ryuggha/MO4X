@@ -19,7 +19,7 @@ export abstract class ShipModule extends Tech {
     }
 }
 
-export abstract class BuildingModule extends Tech {
+export class BuildingModule extends Tech {
     constructor (name: string, tier: number, weight: number) {
         super(name, tier, weight);
     }
@@ -110,5 +110,46 @@ export class BasicPlanetaryDetector extends BuildingModule {
     constructor (name: string, tier: number, weight: number, detectionLevel: number) {
         super(name, tier, weight);
         this.detectionLevel = detectionLevel;
+    }
+}
+
+export abstract class abstractEnergyGainBuilding extends BuildingModule {
+    constructor (name: string, tier: number, weight: number) {
+        super(name, tier, weight);
+    }
+
+    abstract getEnergyPerTurn(): number;
+}
+
+export class basicEnergyGainBuilding extends abstractEnergyGainBuilding {
+    energyPerTurn: number;
+    constructor (name: string, tier: number, weight: number, energyPerTurn: number) {
+        super(name, tier, weight);
+        this.energyPerTurn = energyPerTurn;
+    }
+    getEnergyPerTurn(): number {
+        return this.energyPerTurn;
+    }
+}
+
+export class solarEnergyGainBuilding extends abstractEnergyGainBuilding {
+    orbitalLuminosity: number = -1;
+    solarMultiplier: number = 0;
+    constructor (name: string, tier: number, weight: number, solarMultiplier: number) {
+        super(name, tier, weight);
+        this.solarMultiplier = solarMultiplier;
+    }
+    getEnergyPerTurn(): number {
+        if (this.orbitalLuminosity < 0) {
+            console.error(this.name + " have not been initialized with orbitalLuminosity.");
+            return -1;
+        } 
+        else {
+            return this.orbitalLuminosity * this.solarMultiplier;
+        }
+    }
+
+    setOrbitalLuminosity(orbitalLuminosity: number) {
+        this.orbitalLuminosity = orbitalLuminosity;
     }
 }
