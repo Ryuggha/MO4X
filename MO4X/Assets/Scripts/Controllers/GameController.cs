@@ -27,6 +27,8 @@ public class GameController : MonoBehaviour
     public void setGame(GameResponse game)
     {
         this.gameView = game;
+        TurnHandler.instance.loadGame();
+        this.actualStar = null;
     }
 
     public  GameResponse getGame()

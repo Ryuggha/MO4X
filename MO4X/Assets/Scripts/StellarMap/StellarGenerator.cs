@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StellarGenerator : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class StellarGenerator : MonoBehaviour
     [SerializeField] private Material enemyColor;
     [SerializeField] private Material fightColor;
 
+    [SerializeField] private Button endTurnButton;
     [SerializeField] private GameObject endTurnConfirmationObject;
 
 
@@ -21,6 +23,8 @@ public class StellarGenerator : MonoBehaviour
     private void generateStarMap()
     {
         GameResponse game = GameController.instance.getGame();
+        if (game.turnCanBePlayed) endTurnButton.interactable = true;
+        else endTurnButton.interactable = false;
 
         foreach (var star in game.stars)
         {

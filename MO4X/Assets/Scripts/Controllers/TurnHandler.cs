@@ -26,9 +26,18 @@ public class TurnHandler : MonoBehaviour
         if (actionList == null) actionList = new List<ActionInterface>();
     }
 
+    public void loadGame()
+    {
+        actionList = new List<ActionInterface>();
+    }
+
     public void endTurn()
     {
-        StartCoroutine(TryEndTurn());
+        if (GameController.instance.getGame().turnCanBePlayed)
+        {
+            StartCoroutine(TryEndTurn());
+        }
+        
     }
 
     public void setTurnEnded (bool turnEnded)
@@ -53,7 +62,6 @@ public class TurnHandler : MonoBehaviour
 
         WWWForm form = new WWWForm();
         form.AddField("actionList", JSONParse(generateSerializableObject()));
-        //addFields
 
         UnityWebRequest request = UnityWebRequest.Post(ConexionController.instance.getConexionEndPoint() + "/endTurn", form);
         UnityWebRequestAsyncOperation requestHandler = request.SendWebRequest();

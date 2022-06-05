@@ -8,4 +8,5 @@ public class GameResponse
     public string inviteCode;
     public int actualTurn;
     public StarResponse[] stars;
+    public bool turnCanBePlayed;
 }

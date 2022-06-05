@@ -1204,6 +1204,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5081761637858708744, guid: 353c3bad63249244988350d0581cdc71, type: 3}
   m_PrefabInstance: {fileID: 1097800474}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1097800476 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5081761637858708745, guid: 353c3bad63249244988350d0581cdc71, type: 3}
+  m_PrefabInstance: {fileID: 1097800474}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1124219385
 GameObject:
   m_ObjectHideFlags: 0
@@ -1238,6 +1249,7 @@ MonoBehaviour:
   allyColor: {fileID: 2100000, guid: 6961a21415eba114d86e825a26a220a4, type: 2}
   enemyColor: {fileID: 2100000, guid: 1e5d4b216ce55aa4cbeffd479b01c804, type: 2}
   fightColor: {fileID: 2100000, guid: b404c524db5846e4190b9b8079b578e6, type: 2}
+  endTurnButton: {fileID: 1097800476}
   endTurnConfirmationObject: {fileID: 576384446}
 --- !u!4 &1124219387
 Transform:

@@ -1,11 +1,12 @@
 import { Application } from "express";
 import mongoose from "mongoose";
-import { actionListInterface, moveShip } from "../dataBaseModules/actionsInterface";
+import { actionListInterface, moveShip } from "../gameModules/actionsInterface";
 import CreateStarSystem from "../dataBaseModules/createStarSystem";
 import { dropGame } from "../dataBaseModules/dropGame";
 import LoadGame from "../dataBaseModules/LoadGame";
 import ObjectId from "../dataBaseModules/ObjectId";
 import {createStellarMap} from "../domain/gameGenerator";
+import processTurn from "../domain/TurnParser";
 const AccountModel = mongoose.model('Account');
 import accountSchemaInterface from "../model/AccountModel";
 const GameModel = mongoose.model('Game');
@@ -133,10 +134,9 @@ export = (app: Application) => {
         res.send(response);
 
         if (game.numberOfPlayers <= game.users.length) {
-            game.actualTurn = 0;
             let starMap = createStellarMap();
             await CreateStarSystem(starMap, game, game.numberOfPlayers);
-
+            await processTurn(game);
             await game.save();
         }
 
@@ -158,7 +158,7 @@ export = (app: Application) => {
             return;
         }
 
-        let games = await GameModel.find({users: new mongoose.Types.ObjectId(userId)}, "name users inviteCode actualTurn _id numberOfPlayers") as gameSchemaInterface[];
+        let games = await GameModel.find({users: new mongoose.Types.ObjectId(userId)}) as gameSchemaInterface[];
         if (games == null) {
             response.code = 1;
             response.msg = "games not found";
@@ -179,13 +179,15 @@ export = (app: Application) => {
                 }
                 auxUsers.push(auxUsername);
             }
+
             response.games.push({
                 name: currentGame.name,
                 _id: currentGame._id,
                 users: auxUsers,
                 numberOfPlayers: currentGame.numberOfPlayers,
                 inviteCode: currentGame.inviteCode,
-                actualTurn: currentGame.actualTurn
+                actualTurn: currentGame.actualTurn,
+                turnCanBePlayed: getTurnCanBePlayed(new ObjectId(userId), currentGame),
             });
         }
         response.code = 0;
@@ -276,6 +278,8 @@ export = (app: Application) => {
         response.msg = "Game Loaded Successfully";
 
         response.game = await LoadGame(game);
+
+        response.game.turnCanBePlayed = getTurnCanBePlayed(user._id, game);
         res.send(response);
 
         return;
@@ -288,10 +292,35 @@ export = (app: Application) => {
         };
 
         const actionList = JSON.parse(req.body.actionList) as actionListInterface;
+        
+        let game = await GameModel.findById(new ObjectId(actionList.gameId)) as gameSchemaInterface;
 
-        console.log(actionList);
+        if (getTurnCanBePlayed(new ObjectId(actionList.userId), game)) {
+            game.turnCacheList.push(req.body.actionList);
+            await game.save();
+        }
+        
+
+        if (game.turnCacheList != null && game.users != null && game.turnCacheList.length >= game.users.length) {
+            await processTurn(game);
+        }
+        
 
         res.send(response);
         return;
     });
+
+    function getTurnCanBePlayed(userId: ObjectId, game: gameSchemaInterface): boolean {
+        let turnCanBePlayed = game.actualTurn != null ? game.actualTurn >= 0 : false;
+        if (turnCanBePlayed && game.turnCacheList != null) {
+            for (let turnIndex = 0; turnIndex < game.turnCacheList.length; turnIndex++) {
+                let jsonTurn = JSON.parse(game.turnCacheList[turnIndex]) as actionListInterface;
+                if (userId.equals(new ObjectId(jsonTurn.userId))) {
+                    turnCanBePlayed = false;
+                    break;
+                }
+            }
+        }
+        return turnCanBePlayed;
+    }
 }

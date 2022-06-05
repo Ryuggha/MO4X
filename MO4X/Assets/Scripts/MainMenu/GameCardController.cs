@@ -24,7 +24,7 @@ public class GameCardController : MonoBehaviour
         this.game = game;
         this.nameField.text = game.name;
         this.canvasController = canvasController;
-        if (game.actualTurn >= 0)
+        if (game.turnCanBePlayed)
         {
             abailabilityPanel.color = abailableColor;
         }

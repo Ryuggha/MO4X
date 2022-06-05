@@ -7,12 +7,12 @@ public class TurnSerializableObject
 {
     public string gameId;
     public string userId;
-    public List<ActionInterface> actionList2;
+    public List<ActionInterface> actionList;
 
     public TurnSerializableObject(string gameId, string userId, List<ActionInterface> actionList)
     {
         this.gameId = gameId;
         this.userId = userId;
-        this.actionList2 = actionList;
+        this.actionList = actionList;
     }
 }

@@ -4,6 +4,7 @@ import Lerp from "./Lerp";
 import Planet from "./Planet";
 import { random } from "lodash";
 import PlanetType from "./PlannetType";
+import StarSchemaInterface from "../model/StarModel";
 
 interface starInfo {
     prefix: string,
@@ -113,7 +114,7 @@ class Star {
         
         if (type == null) {
             if (homeSystem != null && homeSystem == true) {
-                type == StarType.YellowDwarf;
+                this.type = StarType.YellowDwarf;
             }
             else {
                 let totalWeight = 0;
@@ -189,8 +190,25 @@ class Star {
         }
     }
 
+    static ModelToStar(star: StarSchemaInterface): Star {
+        let type = StarType.RedDwarf;
+        if (star.starType === 'YellowDwarf') type = StarType.YellowDwarf;
+        else if (star.starType === 'BlueGiant') type = StarType.BlueGiant;
+        else if (star.starType === 'RedGiant') type = StarType.RedGiant;
+        else if (star.starType === 'NeutronStar') type = StarType.NeutronStar;
+        else if (star.starType === 'BlackHole') type = StarType.BlackHole;
+        else if (star.starType === 'BlockHoleAccDisc') type = StarType.BlockHoleAccDisc;
+        else if (star.starType === 'BinarySystem') type = StarType.BinarySystem;
+        return new Star(false, star.name, star.mass, star.radius, type);
+    }
+
     getEnergy(): number {
-        return (this.mass * this.energyQuoficient) / this.radius;
+        return this.getOrbitalEnergy(this.energyQuoficient);
+    };
+
+    getOrbitalEnergy(energyQ: number): number {
+        if (energyQ) return (this.mass * energyQ) / this.radius;
+        else return 0;
     }
 }
 

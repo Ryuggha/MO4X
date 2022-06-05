@@ -16,10 +16,10 @@ const gameSchema = new Schema({
     }],
     inviteCode: String,
     stars: Array,
-    turnCacheList: {
-        type: Array,
-        default: []
-    },
+    turnCacheList: [{
+        type: String,
+        default: [],
+    }],
     actualTurn: {
         type: Number,
         get: (v: number) => Math.round(v),
@@ -36,6 +36,6 @@ export default interface gameSchemaInterface extends mongoose.Document {
     users: mongoose.Types.ObjectId[],
     inviteCode?: string,
     stars?: mongoose.Types.ObjectId[],
-    //turnCacheList: turn[],
+    turnCacheList: string[],
     actualTurn?: number
 };
