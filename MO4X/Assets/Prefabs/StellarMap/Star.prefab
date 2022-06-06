@@ -76,6 +76,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4741f98ce68e2d94b9ed30ab6e24d8b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeToLongPress: 0.35
+  maxDistanceToMove: 0.1
 --- !u!135 &7967181468897256263
 SphereCollider:
   m_ObjectHideFlags: 0

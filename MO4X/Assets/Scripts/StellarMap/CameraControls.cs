@@ -2,14 +2,27 @@ using UnityEngine;
 
 public class CameraControls : MonoBehaviour
 {
+    public static CameraControls instance;
 
     public float screenPanModifier = -0.01f;
 
+    Vector2 firstFramePos;
     Vector2 lastFramePos;
     bool lastFrameWasPresed;
 
+    private void Awake()
+    {
+        CameraControls.instance = this;
+    }
+
+    private void OnDestroy()
+    {
+        CameraControls.instance = null;
+    }
+
     private void Start()
     {
+        firstFramePos = new Vector2(-1, -1);
         StarResponse auxStar = GameController.instance.getActualStar();
         if (auxStar == null || (auxStar != null && auxStar.name == ""))
         {
@@ -27,6 +40,10 @@ public class CameraControls : MonoBehaviour
         {
             if (lastFrameWasPresed)
             {
+                if (firstFramePos.Equals(new Vector2(-1, -1)))
+                {
+                    this.firstFramePos = InputManager.instance.getTouchscreenPos();
+                }
                 move(InputManager.instance.getTouchscreenPos() - lastFramePos);
             }
 
@@ -38,7 +55,13 @@ public class CameraControls : MonoBehaviour
         else
         {
             lastFrameWasPresed = false;
+            firstFramePos = new Vector2(-1, -1);
         }
+    }
+
+    public float getTotalMovementMagnitude()
+    {
+        return (firstFramePos - InputManager.instance.getTouchscreenPos()).magnitude;
     }
 
     private void move(Vector2 vec)

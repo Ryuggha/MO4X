@@ -137,7 +137,6 @@ function processTechInvestigation(planetsWithBuildings: PlanetSchemaInterface[])
                     let auxTech;
                     let found = false;
                     let iterations = 50;
-                    console.log({discipline: discipline, tier: Random.randomInt(1, maxTier)});
                     while (!found) {
                         auxTech = TechFactory({discipline: discipline, tier: Random.randomInt(1, maxTier)});
                         if (auxTech && !planet.technologies.includes(auxTech.name)) {
@@ -147,8 +146,6 @@ function processTechInvestigation(planetsWithBuildings: PlanetSchemaInterface[])
                         iterations--;
                         if (iterations <= 0) found = true;
                     }
-                    console.log(auxTech);
-                    console.log("-.--------------");
                     if (auxTech) {
                         planet.investigationTechnologies[i] = auxTech.name;
                         planet.investigationTechnologiesDescription[i] = getTimeToInvestigateInPlanet(auxTech.tier, planet) + " turns";

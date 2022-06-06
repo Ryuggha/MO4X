@@ -3,7 +3,8 @@ using UnityEngine.EventSystems;
 
 public class StarCollider : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    private float timeToLongPress = 0.15f;
+    public float timeToLongPress = 0.25f;
+    public float maxDistanceToMove = 0.2f;
     private bool accessibleStar;
     private StarResponse star;
     private float timePressed = 0;
@@ -25,7 +26,11 @@ public class StarCollider : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         screenPressed = false;
         if (timePressed < timeToLongPress)
         {
-            enterStarView();
+            if (CameraControls.instance.getTotalMovementMagnitude() <= maxDistanceToMove)
+            {
+                enterStarView();
+            }
+            
         }
         timePressed = 0;
     }
