@@ -145,6 +145,10 @@ class PlanetResponse {
     energy = 0;
     buildings: string[] = [];
     technologies: string[] = [];
+    investigationTechnologies: string[];
+    investigationTechnologiesDescription: string[];
+    technologyBeingInvestigated: string;
+    turnsToFinishInvestigation: number;
 
     constructor (planet: PlanetSchemaInterface) {
         this._id = planet._id.toString();
@@ -159,5 +163,9 @@ class PlanetResponse {
         if (planet.technologies != null) {
             this.technologies = planet.technologies;
         }
+        this.investigationTechnologies = planet.investigationTechnologies;
+        this.investigationTechnologiesDescription = planet.investigationTechnologiesDescription;
+        this.technologyBeingInvestigated = planet.technologyBeingInvestigated;
+        this.turnsToFinishInvestigation = planet.turnsToFinishInvestigation;
     }
 }

@@ -45,6 +45,10 @@ export default async function CreateStarSystem (starMap: SpaceLocation[], game: 
                     radius: orbit.planet.radius,
                     technologies: technologyList,
                     buildings: orbit.planet.buildings,
+                    investigationTechnologies: ["", "", ""],
+                    investigationTechnologiesDescription: ["", "", ""],
+                    turnsToFinishInvestigation: -1,
+                    maxTierOfInvestigation: [1, 1, 1],
                 }) as PlanetSchemaInterface;
                 planetsToSave.push(planetModel);
 

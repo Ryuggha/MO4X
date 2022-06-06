@@ -15,7 +15,10 @@ public class PlanetCardHandler : MonoBehaviour
     [SerializeField] private TextMeshProUGUI radiusText;
     [SerializeField] private Button technologiesButton;
     [SerializeField] private GameObject technologiesExtraCard;
+    [SerializeField] private Button investigationButton;
+    [SerializeField] private GameObject technologyInvestigationExtraCard;
     private TechnologyList techList;
+    private TechnologyInvestigation techInvestigation;
 
     private OrbitResponse orbit;
 
@@ -65,12 +68,23 @@ public class PlanetCardHandler : MonoBehaviour
         if (orbit.planet.buildings.Length > 0)
         {
             technologiesButton.gameObject.SetActive(true);
-            if (orbit.planet.technologies.Length <= 0) technologiesButton.enabled = false;
-            else technologiesButton.enabled = true;
+            investigationButton.gameObject.SetActive(true);
+
+            if (orbit.planet.technologies.Length <= 0)
+            {
+                technologiesButton.enabled = false;
+                investigationButton.enabled = false;
+            }
+            else
+            {
+                technologiesButton.enabled = true;
+                investigationButton.enabled = true;
+            }
         }
         else
         {
             technologiesButton.gameObject.SetActive(false);
+            investigationButton.gameObject.SetActive(false);
         }
     }
 
@@ -79,5 +93,12 @@ public class PlanetCardHandler : MonoBehaviour
         technologiesExtraCard.SetActive(true);
         if (techList == null) techList = technologiesExtraCard.GetComponent<TechnologyList>();
         techList.setTechList(orbit.planet.technologies);
+    }
+
+    public void OnTechnologyInvestigationClick()
+    {
+        technologyInvestigationExtraCard.SetActive(true);
+        if (techInvestigation == null) techInvestigation = technologyInvestigationExtraCard.GetComponent<TechnologyInvestigation>();
+        techInvestigation.setPlanet(orbit.planet);
     }
 }

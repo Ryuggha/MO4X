@@ -23,6 +23,33 @@ const planetSchema = new Schema({
         type: String,
         default: [],
     }],
+    investigationTechnologies: [{
+        type: String,
+        default: []
+    }],
+    investigationTechnologiesDescription: [{
+        type: String,
+        default: []
+    }],
+    technologyBeingInvestigated: {
+        type: String,
+        default: "",
+    },
+    turnsToFinishInvestigation: {
+        type: Number,
+        get: (v: number) => Math.round(v),
+        set: (v: number) => Math.round(v),
+        alias: 'i',
+        required: true,
+        default: -1,
+    },
+    maxTierOfInvestigation: [{
+        type: Number,
+        get: (v: number) => Math.round(v),
+        set: (v: number) => Math.round(v),
+        alias: 'i',
+        required: true,
+    }],
 
     //Ships
 });
@@ -37,5 +64,10 @@ export default interface PlanetSchemaInterface extends mongoose.Document {
     energy?: number,
     technologies: [string],
     buildings: [string],
+    investigationTechnologies: [string],
+    investigationTechnologiesDescription: [string],
+    technologyBeingInvestigated: string,
+    turnsToFinishInvestigation: number,
+    maxTierOfInvestigation: [number],
     // Rest of Things
 }
