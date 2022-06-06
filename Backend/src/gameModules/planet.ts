@@ -112,6 +112,12 @@ export default class Planet {
             this.technologies.push(thermalPanels);
             this.buildings.push(thermalPanels.name);
         }
+
+        let commandBase = TechFactory({name: "Command Base"});
+        if (commandBase != null) {
+            this.technologies.push(commandBase);
+            this.buildings.push(commandBase.name);
+        }
     }
 }
 

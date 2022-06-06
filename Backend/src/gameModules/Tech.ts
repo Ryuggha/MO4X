@@ -1,10 +1,14 @@
+import disciplineEnum from "./disciplineEnum";
+
 export abstract class Tech {
     name: string;
     tier: number;
     weight: number;
+    discipline: disciplineEnum;
 
-    constructor(name: string, tier: number, weight: number) {
+    constructor(name: string, discipline: disciplineEnum, tier: number, weight: number) {
         this.name = name;
+        this.discipline = discipline;
         this.tier = tier;
         this.weight = weight;
     }
@@ -13,21 +17,21 @@ export abstract class Tech {
 export abstract class ShipModule extends Tech {
     energyRequirement: number;
 
-    constructor (name: string, tier: number, weight: number, energyRequirement: number) {
-        super(name, tier, weight);
+    constructor (name: string, discipline: disciplineEnum, tier: number, weight: number, energyRequirement: number) {
+        super(name, discipline, tier, weight);
         this.energyRequirement = energyRequirement;
     }
 }
 
 export class BuildingModule extends Tech {
-    constructor (name: string, tier: number, weight: number) {
-        super(name, tier, weight);
+    constructor (name: string, discipline: disciplineEnum, tier: number, weight: number) {
+        super(name, discipline, tier, weight);
     }
 }
 
 export abstract class BattleShipModule extends ShipModule {
     constructor (name: string, tier: number, weight: number, energyRequirement: number) {
-        super(name, tier, weight, energyRequirement);
+        super(name, disciplineEnum.SpaceCombat, tier, weight, energyRequirement);
     }
 }
 
@@ -50,49 +54,37 @@ export class BasicHull extends BattleShipModule {
     }
 }
 
-export class BasicThruster extends BattleShipModule {
+export class BasicThruster extends ShipModule {
     cellsPerSecond: number;
     constructor (name: string, tier: number, weight: number, energyRequirement: number, cellsPerSecond: number) {
-        super(name, tier, weight, energyRequirement);
+        super(name, disciplineEnum.EmpireLogistics, tier, weight, energyRequirement);
         this.cellsPerSecond = cellsPerSecond;
     }
 }
 
-export class ShipEmpireLogistics extends ShipModule {
-    constructor (name: string, tier: number, weight: number, energyRequirement: number) {
-        super(name, tier, weight, energyRequirement);
-    }
-}
-
-export class BuildingEmpireLogistics extends BuildingModule {
-    constructor (name: string, tier: number, weight: number) {
-        super(name, tier, weight);
-    }
-}
-
-export class BasicShipReactor extends ShipEmpireLogistics{
+export class BasicShipReactor extends ShipModule{
     moduleEnergy: number;
     energyOutput: number;
 
     constructor (name: string, tier: number, weight: number, energyRequirement: number, moduleEnergy: number, energyOutput: number) {
-        super(name, tier, weight, energyRequirement);
+        super(name, disciplineEnum.ResourceAcquisition, tier, weight, energyRequirement);
         this.moduleEnergy = moduleEnergy;
         this.energyOutput = energyOutput;
     }
 }
 
-export class BasicShipCamuflage extends ShipEmpireLogistics {
+export class BasicShipCamuflage extends ShipModule {
     camuflageLevel: number;
     constructor (name: string, tier: number, weight: number, energyRequirement: number,camuflageLevel: number) {
-        super(name, tier, weight, energyRequirement);
+        super(name, disciplineEnum.EmpireLogistics, tier, weight, energyRequirement);
         this.camuflageLevel = camuflageLevel;
     }
 }
 
-export class BasicShipDetector extends ShipEmpireLogistics {
+export class BasicShipDetector extends ShipModule {
     detectionLevel: number;
     constructor (name: string, tier: number, weight: number, energyRequirement: number, detectionLevel: number) {
-        super(name, tier, weight, energyRequirement);
+        super(name,disciplineEnum.EmpireLogistics, tier, weight, energyRequirement);
         this.detectionLevel = detectionLevel;
     }
 }
@@ -100,7 +92,7 @@ export class BasicShipDetector extends ShipEmpireLogistics {
 export class BasicPlanetaryCamuflage extends BuildingModule {
     camuflageLevel: number;
     constructor (name: string, tier: number, weight: number, camuflageLevel: number) {
-        super(name, tier, weight);
+        super(name, disciplineEnum.EmpireLogistics, tier, weight);
         this.camuflageLevel = camuflageLevel;
     }
 }
@@ -108,14 +100,14 @@ export class BasicPlanetaryCamuflage extends BuildingModule {
 export class BasicPlanetaryDetector extends BuildingModule {
     detectionLevel: number;
     constructor (name: string, tier: number, weight: number, detectionLevel: number) {
-        super(name, tier, weight);
+        super(name, disciplineEnum.EmpireLogistics, tier, weight);
         this.detectionLevel = detectionLevel;
     }
 }
 
 export abstract class abstractEnergyGainBuilding extends BuildingModule {
     constructor (name: string, tier: number, weight: number) {
-        super(name, tier, weight);
+        super(name, disciplineEnum.ResourceAcquisition, tier, weight);
     }
 
     abstract getEnergyPerTurn(): number;
