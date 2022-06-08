@@ -8,7 +8,8 @@ public class Planet : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private float timeToLongPress = 0.15f;
     private float timePressed = 0;
     private bool screenPressed;
-    public OrbitResponse orbit;
+    private StarResponse star;
+    [SerializeField] private OrbitResponse orbit;
 
     private SystemGenerator systemGenerator;
 
@@ -20,6 +21,12 @@ public class Planet : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private void Update()
     {
         if (screenPressed) timePressed += Time.deltaTime;
+    }
+
+    public void setReferences (StarResponse star, OrbitResponse orbit)
+    {
+        this.star = star;
+        this.orbit = orbit;
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -40,6 +47,6 @@ public class Planet : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private void openPlanetCard()
     {
         systemGenerator.activatePlanetCard();
-        PlanetCardHandler.instance.setOrbit(orbit);
+        PlanetCardHandler.instance.setOrbit(star, orbit);
     }
 }

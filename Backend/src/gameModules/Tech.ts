@@ -24,8 +24,10 @@ export abstract class ShipModule extends Tech {
 }
 
 export class BuildingModule extends Tech {
-    constructor (name: string, discipline: disciplineEnum, tier: number, weight: number) {
+    priceInEnergy: number;
+    constructor (name: string, discipline: disciplineEnum, tier: number, weight: number, priceInEnergy: number) {
         super(name, discipline, tier, weight);
+        this.priceInEnergy = priceInEnergy;
     }
 }
 
@@ -91,23 +93,23 @@ export class BasicShipDetector extends ShipModule {
 
 export class BasicPlanetaryCamuflage extends BuildingModule {
     camuflageLevel: number;
-    constructor (name: string, tier: number, weight: number, camuflageLevel: number) {
-        super(name, disciplineEnum.EmpireLogistics, tier, weight);
+    constructor (name: string, tier: number, weight: number, camuflageLevel: number, priceInEnergy: number) {
+        super(name, disciplineEnum.EmpireLogistics, tier, weight, priceInEnergy);
         this.camuflageLevel = camuflageLevel;
     }
 }
 
 export class BasicPlanetaryDetector extends BuildingModule {
     detectionLevel: number;
-    constructor (name: string, tier: number, weight: number, detectionLevel: number) {
-        super(name, disciplineEnum.EmpireLogistics, tier, weight);
+    constructor (name: string, tier: number, weight: number, detectionLevel: number, priceInEnergy: number) {
+        super(name, disciplineEnum.EmpireLogistics, tier, weight, priceInEnergy);
         this.detectionLevel = detectionLevel;
     }
 }
 
 export abstract class abstractEnergyGainBuilding extends BuildingModule {
-    constructor (name: string, tier: number, weight: number) {
-        super(name, disciplineEnum.ResourceAcquisition, tier, weight);
+    constructor (name: string, tier: number, weight: number, priceInEnergy: number) {
+        super(name, disciplineEnum.ResourceAcquisition, tier, weight, priceInEnergy);
     }
 
     abstract getEnergyPerTurn(): number;
@@ -115,8 +117,8 @@ export abstract class abstractEnergyGainBuilding extends BuildingModule {
 
 export class basicEnergyGainBuilding extends abstractEnergyGainBuilding {
     energyPerTurn: number;
-    constructor (name: string, tier: number, weight: number, energyPerTurn: number) {
-        super(name, tier, weight);
+    constructor (name: string, tier: number, weight: number, energyPerTurn: number, priceInEnergy: number) {
+        super(name, tier, weight, priceInEnergy);
         this.energyPerTurn = energyPerTurn;
     }
     getEnergyPerTurn(): number {
@@ -127,8 +129,8 @@ export class basicEnergyGainBuilding extends abstractEnergyGainBuilding {
 export class solarEnergyGainBuilding extends abstractEnergyGainBuilding {
     orbitalLuminosity: number = -1;
     solarMultiplier: number = 0;
-    constructor (name: string, tier: number, weight: number, solarMultiplier: number) {
-        super(name, tier, weight);
+    constructor (name: string, tier: number, weight: number, solarMultiplier: number, priceInEnergy: number) {
+        super(name, tier, weight, priceInEnergy);
         this.solarMultiplier = solarMultiplier;
     }
     getEnergyPerTurn(): number {

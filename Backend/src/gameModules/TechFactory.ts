@@ -41,24 +41,24 @@ function getTechnologies(name?: string): Tech[] {
     if (fullList || name === "AntiRadar") r.push( new BasicShipCamuflage("AntiRadar", 1, 10, 10, 5)); 
     if (fullList || name === "Luminar Mirror") r.push( new BasicShipCamuflage("Luminar Mirror", 2, 10, 20, 10));
     if (fullList || name === "Gravity Mirror") r.push( new BasicShipCamuflage("Gravity Mirror", 3, 5, 40, 15));
-    if (fullList || name === "Defractor Image") r.push( new BasicPlanetaryCamuflage("Defractor Image", 1, 10, 4));
-    if (fullList || name === "Luminar Mirage") r.push( new BasicPlanetaryCamuflage("Luminar Mirage", 2, 5, 9));
-    if (fullList || name === "Planar Shift") r.push( new BasicPlanetaryCamuflage("Planar Shift", 3, 2, 14));
+    if (fullList || name === "Defractor Image") r.push( new BasicPlanetaryCamuflage("Defractor Image", 1, 10, 4, 200));
+    if (fullList || name === "Luminar Mirage") r.push( new BasicPlanetaryCamuflage("Luminar Mirage", 2, 5, 9, 600));
+    if (fullList || name === "Planar Shift") r.push( new BasicPlanetaryCamuflage("Planar Shift", 3, 2, 14, 1000));
 
     if (fullList || name === "Electro Detector") r.push( new BasicShipDetector("Electro Detector", 1, 5, 10, 5));
     if (fullList || name === "Wave Detector") r.push( new BasicShipDetector("Wave Detector", 2, 5, 20, 10));
     if (fullList || name === "Planar Detector") r.push( new BasicShipDetector("Planar Detector", 3, 2, 40, 15));
-    if (fullList || name === "Radio Detector") r.push( new BasicPlanetaryDetector("Radio Detector", 1, 5, 4));
-    if (fullList || name === "Laser Interferometer") r.push( new BasicPlanetaryDetector("Laser Interferometer", 2, 2, 9));
-    if (fullList || name === "Antimatter Detector") r.push( new BasicPlanetaryDetector("Antimatter Detector", 3, 1, 14));
+    if (fullList || name === "Radio Detector") r.push( new BasicPlanetaryDetector("Radio Detector", 1, 5, 4, 300));
+    if (fullList || name === "Laser Interferometer") r.push( new BasicPlanetaryDetector("Laser Interferometer", 2, 2, 9, 900));
+    if (fullList || name === "Antimatter Detector") r.push( new BasicPlanetaryDetector("Antimatter Detector", 3, 1, 14, 1500));
 
-    if (fullList || name === "Hangar") r.push( new BuildingModule("Hangar", disciplineEnum.EmpireLogistics, 0, 0));
-    if (fullList || name === "Command Base") r.push( new BuildingModule("Command Base", disciplineEnum.ResourceAcquisition, 0, 0));
+    if (fullList || name === "Hangar") r.push( new BuildingModule("Hangar", disciplineEnum.EmpireLogistics, 0, 0, 0));
+    if (fullList || name === "Command Base") r.push( new BuildingModule("Command Base", disciplineEnum.ResourceAcquisition, 0, 0, 0));
 
-    if (fullList || name === "Thermal Panels") r.push( new solarEnergyGainBuilding("Thermal Panels", 0, 0, 1));
-    if (fullList || name === "Solar Panels") r.push( new solarEnergyGainBuilding("Solar Panels", 0, 0, 5));
-    if (fullList || name === "Advanced Solar Panels") r.push( new solarEnergyGainBuilding( "Advanced Solar Panels", 0, 0, 10));
-    if (fullList || name === "Solar Power Plant") r.push( new solarEnergyGainBuilding("Solar Power Plant", 0, 0, 20));
+    if (fullList || name === "Thermal Panels") r.push( new solarEnergyGainBuilding("Thermal Panels", 0, 0, 1, 0));
+    if (fullList || name === "Solar Panels") r.push( new solarEnergyGainBuilding("Solar Panels", 0, 0, 5, 500));
+    if (fullList || name === "Advanced Solar Panels") r.push( new solarEnergyGainBuilding( "Advanced Solar Panels", 0, 0, 10, 1200));
+    if (fullList || name === "Solar Power Plant") r.push( new solarEnergyGainBuilding("Solar Power Plant", 0, 0, 20, 2000));
 
     return r;
 }

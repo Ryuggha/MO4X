@@ -15,11 +15,19 @@ public class PlanetCardHandler : MonoBehaviour
     [SerializeField] private TextMeshProUGUI radiusText;
     [SerializeField] private Button technologiesButton;
     [SerializeField] private GameObject technologiesExtraCard;
+    private TechnologyList techList;
     [SerializeField] private Button investigationButton;
     [SerializeField] private GameObject technologyInvestigationExtraCard;
-    private TechnologyList techList;
     private TechnologyInvestigation techInvestigation;
+    [SerializeField] private Button buildingListButton;
+    [SerializeField] private GameObject buildingListExtraCard;
+    private BuildingList buildingList;
+    [SerializeField] private Button createBuildingListButton;
+    [SerializeField] private GameObject createBuildingListExtraCard;
+    private BuildNewBuildings createBuildingList;
 
+
+    private StarResponse star;
     private OrbitResponse orbit;
 
     private void Awake()
@@ -45,6 +53,22 @@ public class PlanetCardHandler : MonoBehaviour
         anim.Play("PlanetInfoAppear");
     }
 
+    public OrbitResponse getOrbit()
+    {
+        return this.orbit;
+    }
+
+    public bool spendEnergy(int ammount)
+    {
+        if (orbit.planet.energy >= ammount)
+        {
+            orbit.planet.energy -= ammount;
+            energyText.text = orbit.planet.energy.ToString();
+            return true;
+        }
+        return false;
+    }
+
     public void OnHidePlanetCardClick()
     {
         anim.Play("PlanetInfoDisappear");
@@ -55,8 +79,9 @@ public class PlanetCardHandler : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void setOrbit(OrbitResponse orbit) // Change Hole Card
+    public void setOrbit(StarResponse star, OrbitResponse orbit) // Change Hole Card
     {
+        this.star = star;
         this.orbit = orbit;
 
         nameText.text = orbit.planet.name;
@@ -69,22 +94,31 @@ public class PlanetCardHandler : MonoBehaviour
         {
             technologiesButton.gameObject.SetActive(true);
             investigationButton.gameObject.SetActive(true);
+            buildingListButton.gameObject.SetActive(true);
+            createBuildingListButton.gameObject.SetActive(true);
 
             if (orbit.planet.technologies.Length <= 0)
             {
-                technologiesButton.enabled = false;
-                investigationButton.enabled = false;
+                technologiesButton.interactable = false;
+                investigationButton.interactable = false;
             }
             else
             {
-                technologiesButton.enabled = true;
-                investigationButton.enabled = true;
+                technologiesButton.interactable = true;
+                investigationButton.interactable = true;
             }
+
+            buildingListButton.interactable = true;
+
+            if (orbit.planet.possibleBuildingNames.Length > 0) createBuildingListButton.interactable = true;
+            else createBuildingListButton.interactable = false;
         }
         else
         {
             technologiesButton.gameObject.SetActive(false);
             investigationButton.gameObject.SetActive(false);
+            buildingListButton.gameObject.SetActive(false);
+            createBuildingListButton.gameObject.SetActive(false);
         }
     }
 
@@ -99,6 +133,20 @@ public class PlanetCardHandler : MonoBehaviour
     {
         technologyInvestigationExtraCard.SetActive(true);
         if (techInvestigation == null) techInvestigation = technologyInvestigationExtraCard.GetComponent<TechnologyInvestigation>();
-        techInvestigation.setPlanet(orbit.planet);
+        techInvestigation.setPlanet(orbit, star);
+    }
+
+    public void OnBuildingListClick()
+    {
+        buildingListExtraCard.SetActive(true);
+        if (buildingList == null) buildingList = buildingListExtraCard.GetComponent<BuildingList>();
+        buildingList.setBuildingList(orbit.planet.buildings);
+    }
+
+    public void OnCreateBuildingClick()
+    {
+        createBuildingListExtraCard.SetActive(true);
+        if (createBuildingList == null) createBuildingList = createBuildingListExtraCard.GetComponent<BuildNewBuildings>();
+        createBuildingList.setBuildingList(orbit.planet);
     }
 }

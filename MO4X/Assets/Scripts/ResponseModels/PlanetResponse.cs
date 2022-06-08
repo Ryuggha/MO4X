@@ -12,5 +12,9 @@ public class PlanetResponse
     public string[] investigationTechnologies;
     public string[] investigationTechnologiesDescription;
     public string technologyBeingInvestigated;
-    public float turnsToFinishInvestigation;
+    public int turnsToFinishInvestigation;
+    public string[] possibleBuildingNames;
+    public int[] possibleBuildingEnergies;
+    public int[] possibleBuildingTurns;
+    public int[] turnsToFinishBuilding;
 }

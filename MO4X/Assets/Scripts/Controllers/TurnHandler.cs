@@ -52,9 +52,42 @@ public class TurnHandler : MonoBehaviour
 
     public bool changeStarName(StarResponse star, string newName)
     {
+        for (int i = actionList.Count - 1; i >= 0; i--)
+        {
+            if (actionList[i].code == 1)
+            {
+                var actionChildObject = (ChangeStarName)actionList[i];
+                if (actionChildObject.starId == star._id) actionList.RemoveAt(i);
+            }
+        }
         actionList.Add(new ChangeStarName(star._id, newName));
         star.name = newName;
         return true;
+    }
+
+    public bool selectTechnology(StarResponse star, PlanetResponse planet, int techIndex)
+    {
+        for (int i = actionList.Count - 1; i >= 0; i--)
+        {
+            if (actionList[i].code == 2)
+            {
+                var actionChildObject = (SelectTechnology)actionList[i];
+                if (actionChildObject.planetId == planet._id) actionList.RemoveAt(i);
+            }
+        }
+
+        if (planet.investigationTechnologies[techIndex] == "") return false;
+        actionList.Add(new SelectTechnology(star._id, planet._id, planet.investigationTechnologies[techIndex]));
+        return true;
+    }
+
+    public bool buildBuilding(StarResponse star, PlanetResponse planet, string buildingName, int energyRequired)
+    {
+        if (planet.energy < energyRequired) return false;
+        actionList.Add(new BuildBuilding(star._id, planet._id, buildingName));
+
+        return true;
+
     }
 
     public IEnumerator TryEndTurn()

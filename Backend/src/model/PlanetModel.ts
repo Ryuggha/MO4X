@@ -50,6 +50,34 @@ const planetSchema = new Schema({
         alias: 'i',
         required: true,
     }],
+    possibleBuildingNames: [{
+        type: String,
+        default: [],
+    }],
+    possibleBuildingEnergies: [{
+        type: Number,
+        get: (v: number) => Math.round(v),
+        set: (v: number) => Math.round(v),
+        alias: 'i',
+        required: true,
+        default: [],
+    }],
+    possibleBuildingTurns: [{
+        type: Number,
+        get: (v: number) => Math.round(v),
+        set: (v: number) => Math.round(v),
+        alias: 'i',
+        required: true,
+        default: [],
+    }],
+    turnsToFinishBuilding: [{
+        type: Number,
+        get: (v: number) => Math.round(v),
+        set: (v: number) => Math.round(v),
+        alias: 'i',
+        required: true,
+        default: [],
+    }],
 
     //Ships
 });
@@ -62,12 +90,16 @@ export default interface PlanetSchemaInterface extends mongoose.Document {
     mass: number,
     radius: number,
     energy?: number,
-    technologies: [string],
-    buildings: [string],
-    investigationTechnologies: [string],
-    investigationTechnologiesDescription: [string],
+    technologies: string[],
+    buildings: string[],
+    investigationTechnologies: string[],
+    investigationTechnologiesDescription: string[],
     technologyBeingInvestigated: string,
     turnsToFinishInvestigation: number,
-    maxTierOfInvestigation: [number],
+    maxTierOfInvestigation: number[],
+    possibleBuildingNames: string[],
+    possibleBuildingEnergies: number[],
+    possibleBuildingTurns: number[],
+    turnsToFinishBuilding: number[],
     // Rest of Things
 }

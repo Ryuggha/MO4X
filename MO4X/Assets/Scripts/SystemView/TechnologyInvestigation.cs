@@ -1,11 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class TechnologyInvestigation : MonoBehaviour
 {
-    private PlanetResponse planet;
+    private StarResponse star;
+    private OrbitResponse orbit;
+
+    [SerializeField] private Color neutralColor;
+    [SerializeField] private Color selectedColor;
 
     [Header("On Course")]
     [SerializeField] private GameObject investigationOnCourseObject;
@@ -16,9 +19,14 @@ public class TechnologyInvestigation : MonoBehaviour
     [SerializeField] private GameObject investigationSelectionObject;
     [SerializeField] private TechCard[] investigationCards;
     [SerializeField] private TextMeshProUGUI[] investigationText;
+    [SerializeField] private Image[] borders;
 
-    public void setPlanet(PlanetResponse planet)
+    public void setPlanet(OrbitResponse orbit, StarResponse star)
     {
+        this.star = star;
+        this.orbit = orbit;
+        PlanetResponse planet = orbit.planet;
+
         if (planet.technologyBeingInvestigated != "")
         {
             investigationOnCourseObject.SetActive(true);
@@ -37,6 +45,30 @@ public class TechnologyInvestigation : MonoBehaviour
                 investigationCards[i].setTechName(planet.investigationTechnologies[i]);
                 investigationText[i].text = planet.investigationTechnologiesDescription[i];
             }
+        }
+    }
+
+    public void OnPressFirstTech()
+    {
+        selectTech(0);
+    }
+
+    public void OnPressSecondTech()
+    {
+        selectTech(1);
+    }
+
+    public void OnPressThirdTech()
+    {
+        selectTech(2);
+    }
+
+    private void selectTech(int techIndex)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            if (i == techIndex && TurnHandler.instance.selectTechnology(star, orbit.planet, techIndex)) borders[i].color = selectedColor;
+            else borders[i].color = neutralColor;
         }
     }
 }

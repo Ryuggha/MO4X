@@ -16,4 +16,16 @@ export interface moveShip extends actionInterface {
 export interface changeStarName extends actionInterface {
     starId: string,
     newName: string,
+};
+
+export interface selectTechnology extends actionInterface {
+    starId: string,
+    planetId: string,
+    technologyName: string,
+};
+
+export interface buildBuilding extends actionInterface {
+    starId: string,
+    planetId: string,
+    buildingName: string,
 }

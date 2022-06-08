@@ -36,3 +36,33 @@ public class ChangeStarName : ActionInterface
         this.newName = newName;
     }
 }
+
+[Serializable]
+public class SelectTechnology : ActionInterface
+{
+    public string planetId;
+    public string starId;
+    public string technologyName;
+
+    public SelectTechnology(string starId, string planetId, string technologyName) : base(2)
+    {
+        this.starId = starId;
+        this.planetId = planetId;
+        this.technologyName = technologyName;
+    }
+}
+
+[Serializable]
+public class BuildBuilding : ActionInterface
+{
+    public string planetId;
+    public string starId;
+    public string buildingName;
+
+    public BuildBuilding(string starId, string planetId, string buildingName) : base(3)
+    {
+        this.starId = starId;
+        this.planetId = planetId;
+        this.buildingName = buildingName;
+    }
+}

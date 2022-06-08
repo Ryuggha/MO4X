@@ -65,7 +65,7 @@ public class SystemGenerator : MonoBehaviour
                 }
 
                 var planetObject = Instantiate(auxPrefab, orbitObject.transform);
-                planetObject.GetComponent<Planet>().orbit = orbit;
+                planetObject.GetComponent<Planet>().setReferences(star, orbit);
                 float planetOffset = 5f + ((orbit.index * (13f / star.orbits.Length)) + ((13f / star.orbits.Length) / 2f));
                 planetObject.transform.localPosition = new Vector3(planetOffset, 0, 0);
                 orbitObject.transform.rotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);

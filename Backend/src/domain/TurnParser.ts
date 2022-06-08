@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
-import { actionInterface, actionListInterface, changeStarName, moveShip } from "../gameModules/actionsInterface";
+import { actionInterface, actionListInterface, buildBuilding, changeStarName, moveShip, selectTechnology } from "../gameModules/actionsInterface";
 import ObjectId from "../dataBaseModules/ObjectId";
 import accountSchemaInterface from "../model/AccountModel";
 import gameSchemaInterface from "../model/GameModel";
 import StarSchemaInterface from "../model/StarModel";
 import PlanetSchemaInterface from "../model/PlanetModel";
 import TechFactory from "../gameModules/TechFactory";
-import { abstractEnergyGainBuilding, solarEnergyGainBuilding } from "../gameModules/Tech";
+import { abstractEnergyGainBuilding, BuildingModule, solarEnergyGainBuilding } from "../gameModules/Tech";
 import OrbitSchemaInterface from "../model/OrbitModel";
 import Star from "../gameModules/Star";
 import Random from "../gameModules/Random";
@@ -36,6 +36,8 @@ export default async function processTurn(game: gameSchemaInterface) {
         
                 if (action.code == 0) await processMoveShip(game, user, action as moveShip);
                 else if (action.code == 1) await processChangeStarName(game, user, action as changeStarName);
+                else if (action.code == 2) await processSelectTechnology(game, user, action as selectTechnology);
+                else if (action.code == 3) await processBuildBuilding(game, user, action as buildBuilding);
             }
         }
     }
@@ -68,8 +70,11 @@ async function processPassiveBuildings(game: gameSchemaInterface) {
             {_id: {$in: planetIds}}
         ]}) as PlanetSchemaInterface[];
 
+    
     processEnergyGain(planetsWithBuildings, allOrbits, allStars);
     processTechInvestigation(planetsWithBuildings);
+
+    generatePossibleBuildings(planetsWithBuildings);
 
     for (const planet of planetsWithBuildings) await planet.save();
 }
@@ -160,10 +165,51 @@ function processTechInvestigation(planetsWithBuildings: PlanetSchemaInterface[])
     }
 }
 
+function generatePossibleBuildings(planetsWithBuildings: PlanetSchemaInterface[]) {
+    for (const planet of planetsWithBuildings) {
+        let buildingCache = [];
+        let turnsLeftCache = [];
+        let energyCache = [];
+        let turnsCache = [];
+
+        for (let i = 0; i < planet.possibleBuildingNames.length; i++) {
+            if (planet.turnsToFinishBuilding[i] != -1) {
+                buildingCache.push(planet.possibleBuildingNames[i]);
+                turnsLeftCache.push(planet.turnsToFinishBuilding[i] - 1);
+                energyCache.push(planet.possibleBuildingEnergies[i]);
+                turnsCache.push(planet.possibleBuildingTurns[i]);
+            }
+        }
+
+        planet.possibleBuildingNames = buildingCache;
+        planet.possibleBuildingTurns = turnsCache;
+        planet.possibleBuildingEnergies = energyCache;
+        planet.turnsToFinishBuilding = turnsLeftCache;
+
+        for (const tech of planet.technologies) {
+            let auxTech = TechFactory({name: tech});
+            if (auxTech != null && auxTech instanceof BuildingModule) {
+                if (!planet.buildings.includes(auxTech.name) && !planet.possibleBuildingNames.includes(auxTech.name)) {
+                    planet.possibleBuildingNames.push(auxTech.name);
+                    planet.possibleBuildingTurns.push(getTimeToBuildInPlanet(auxTech.tier, planet));
+                    planet.possibleBuildingEnergies.push(auxTech.priceInEnergy);
+                    planet.turnsToFinishBuilding.push(-1);
+                }
+            }
+        }
+    }
+}
+
 function getTimeToInvestigateInPlanet(tier: number, planet: PlanetSchemaInterface) : number {
     if (tier === 1) return 10;
     if (tier === 2) return 20;
     else return 40;
+}
+
+function getTimeToBuildInPlanet(tier: number, planet: PlanetSchemaInterface) : number {
+    if (tier === 1) return 3;
+    if (tier === 2) return 5;
+    else return 10;
 }
 
 async function processMoveShip(game: gameSchemaInterface, user: accountSchemaInterface, action: moveShip) {
@@ -172,10 +218,56 @@ async function processMoveShip(game: gameSchemaInterface, user: accountSchemaInt
 
 async function processChangeStarName(game: gameSchemaInterface, user: accountSchemaInterface, action: changeStarName) {
     let star = await StarModel.findById(new ObjectId(action.starId)) as StarSchemaInterface;
+    if (starBelongsToPlayer(game, user, star)) {
+        star.name = action.newName;
+        await star.save();
+    }
+}
+
+async function processSelectTechnology(game: gameSchemaInterface, user: accountSchemaInterface, action: selectTechnology) {
+    let star = await StarModel.findById(new ObjectId(action.starId)) as StarSchemaInterface;
+    
+    if (starBelongsToPlayer(game, user, star)) {
+        let planet = await PlanetModel.findById(new ObjectId(action.planetId)) as PlanetSchemaInterface;
+        let indexOfTech = planet.investigationTechnologies.indexOf(action.technologyName);
+        if (indexOfTech != -1) {
+            let tech = TechFactory({name: planet.investigationTechnologies[indexOfTech]});
+            planet.investigationTechnologies[indexOfTech] = "";
+            planet.investigationTechnologiesDescription[indexOfTech] = "";
+            if (tech != null && !planet.technologies.includes(tech.name)) {
+                planet.turnsToFinishInvestigation = getTimeToInvestigateInPlanet(tech.tier, planet);
+                planet.technologyBeingInvestigated = tech.name;
+            }
+        }
+
+        await planet.save();
+    }
+}
+
+async function processBuildBuilding(game: gameSchemaInterface, user: accountSchemaInterface, action: buildBuilding) {
+    let star = await StarModel.findById(new ObjectId(action.starId)) as StarSchemaInterface;
+
+    if (starBelongsToPlayer(game, user, star)) {
+        let planet = await PlanetModel.findById(new ObjectId(action.planetId)) as PlanetSchemaInterface;
+        let indexOfBuilding = planet.possibleBuildingNames.indexOf(action.buildingName);
+        if (indexOfBuilding != -1) {
+            let tech = TechFactory({name: action.buildingName});
+            if (tech != null && !planet.buildings.includes(tech.name)) {
+                if (planet.energy != null && planet.energy >= planet.possibleBuildingEnergies[indexOfBuilding]) {
+                    planet.energy -= planet.possibleBuildingEnergies[indexOfBuilding];
+                    planet.turnsToFinishBuilding[indexOfBuilding] = getTimeToBuildInPlanet(tech.tier, planet);
+                }
+            }
+        }
+        await planet.save();
+    }
+}
+
+function starBelongsToPlayer (game: gameSchemaInterface, user: accountSchemaInterface, star: StarSchemaInterface): boolean {
     if (game.stars != null && game.stars.includes(star._id)) {
         if (star.userController?.equals(user._id)) {
-            star.name = action.newName;
-            await star.save();
+            return true;
         }
     }
+    return false;
 }
