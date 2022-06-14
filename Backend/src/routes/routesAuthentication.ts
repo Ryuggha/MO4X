@@ -97,7 +97,6 @@ export = (app: Application) => {
                 return;
             }
             
-            // Generate a unique access token
             crypto.randomBytes(32, function(err, salt) {
                 argon.hash(password, salt).then(async (hash: any) => {
     
@@ -109,7 +108,7 @@ export = (app: Application) => {
                     });
                     await newAccount.save();
                     response.code = 0;
-                    response.msg = "Sing In Successful"
+                    response.msg = "Sing Up Successful";
                     response.gameAccount = { username: username };
                     res.send(response);
                     return;

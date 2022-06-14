@@ -5,8 +5,6 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import { ConnectionOptions } from 'tls';
 
-import { dropGame } from './dataBaseModules/dropGame';
-
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -19,6 +17,7 @@ require('./model/GameModel');
 require('./model/StarModel');
 require('./model/OrbitModel');
 require('./model/PlanetModel');
+require('./model/ShipModel');
 
 //Setup the Routes
 require('./routes/routesAuthentication')(app);

@@ -2,6 +2,7 @@ import SimplexNoise from "simplex-noise";
 import Random from "../gameModules/Random";
 import SpaceLocation from "../gameModules/SpaceLocation";
 import Vector2 from "../gameModules/Vector2";
+import lerp from "../gameModules/Lerp";
 
 let numberOfStars = 1000;
 let squaredDistance = 1;
@@ -11,7 +12,7 @@ let minimumVoidDistance = 0.8;
 export function createStellarMap (): SpaceLocation[] {
 
     let starMap: SpaceLocation[] = [];
-    let noise = new SimplexNoise;
+    let noise = new SimplexNoise();
     let starsLeft = numberOfStars;
     let mapSizeRadius = Math.sqrt(numberOfStars) * squaredDistance;
 
